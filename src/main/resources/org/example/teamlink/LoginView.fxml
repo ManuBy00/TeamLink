@@ -1,32 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="300" prefWidth="400.0" style="-fx-background-color: #4A90E2;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.Controller.LoginController">
 
-    <!-- Contenedor centrado -->
-    <VBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="257.0" prefWidth="291.0" spacing="15" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="60.0">
+    <VBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="257.0" prefWidth="291.0" spacing="10" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="60.0">
 
-        <!-- Título -->
-        <Label text="TeamLink" textFill="WHITE">
-            <font>
-                <Font name="Inter Semi Bold" size="28.0" />
-            </font>
-        </Label>
+        <ImageView fitHeight="164.0" fitWidth="181.0" preserveRatio="true">
+            <image>
+                <Image url="@../../../Images/Logo.png" />
+            </image>
+        </ImageView>
 
-        <!-- Email -->
-        <TextField fx:id="emailField" prefHeight="25.0" prefWidth="337.0" promptText="Correo electrónico" />
+        <TextField fx:id="emailField" prefHeight="14.0" prefWidth="290.0" promptText="Correo electrónico" />
 
-        <!-- Contraseña -->
         <PasswordField fx:id="passwordField" prefWidth="250" promptText="Contraseña" />
 
-        <!-- Botón login -->
-        <Button fx:id="loginButton" prefWidth="150" text="Iniciar sesión" />
-      <Label text="No tienes cuenta? Haz click aquí." />
+        <Button fx:id="loginButton" onAction="#login" prefWidth="150" text="Iniciar sesión" />
+        <Hyperlink fx:id="regFormLink" onAction="#lanzarRegForm" style="-fx-text-fill: black;" text="¿No tienes cuenta? Haz click aquí." />
 
-        <!-- Mensaje de error -->
         <Label fx:id="errorLabel" textFill="RED" visible="false" />
 
     </VBox>

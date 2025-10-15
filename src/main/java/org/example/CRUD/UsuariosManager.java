@@ -1,5 +1,6 @@
 package org.example.CRUD;
 
+import org.example.DataAccess.XML;
 import org.example.Exceptions.ElementoNoEncontrado;
 import org.example.Exceptions.ElementoRepetido;
 import org.example.Model.Usuario;
@@ -24,7 +25,7 @@ public class UsuariosManager implements CRUD<Usuario>{
 
     public static UsuariosManager getInstance(){
         if (instance==null){
-            instance = new UsuariosManager();
+            instance = XML.readXML(UsuariosManager.class, "Usuarios.XML");
         }
         return instance;
     }

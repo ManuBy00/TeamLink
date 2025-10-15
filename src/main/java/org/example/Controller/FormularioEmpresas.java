@@ -3,7 +3,10 @@ package org.example.Controller;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import org.example.CRUD.UsuariosManager;
 import org.example.DataAccess.XML;
 import org.example.Exceptions.ElementoRepetido;
@@ -49,7 +52,7 @@ public class FormularioEmpresas {
         String password = passwordField.getText();
         String telefono = telefonoField.getText();
         String direccion = direccionField.getText();
-        String sector = sectorField.getValue();
+        String sector =  sectorField.getValue();
         String descripcion = descripcionField.getText();
 
         if (nombre.isEmpty() || email.isEmpty() || password.isEmpty() || telefono.isEmpty() || direccion.isEmpty() || sector.isEmpty() || descripcion.isEmpty()) {
@@ -68,9 +71,13 @@ public class FormularioEmpresas {
 
         try {
             um.add(nuevaEmpresa);
-            XML.writeXML(um.getUsuariosList(), "Usuarios.XML");
+            XML.writeXML(um, "Usuarios.XML");
         }catch (ElementoRepetido e){
             Utilidades.mostrarAlerta("Empresa ya registrada", "Ya existe una empresa registrada con ese nombre o correo");
         }
+
+        Stage stage = (Stage) passwordField.getScene().getWindow();
+        stage.close();
+
     }
 }

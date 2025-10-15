@@ -5,6 +5,7 @@ module org.example.teamlink {
     requires jbcrypt;
     requires java.xml.bind;
 
+
     // JavaFX necesita acceso a controladores y vistas
     opens org.example.teamlink to javafx.fxml;
     opens org.example.Controller to javafx.fxml;

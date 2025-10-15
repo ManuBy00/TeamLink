@@ -33,7 +33,7 @@
         <TextField fx:id="direccionField" prefWidth="300" promptText="Dirección de la empresa" />
 
         <!-- Sector -->
-        <ComboBox fx:id="sectorComboBox" prefWidth="300" promptText="Sector">
+        <ComboBox fx:id="sectorField" prefWidth="300" promptText="Sector">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Tecnología" />
@@ -44,7 +44,7 @@
                 </FXCollections>
             </items>
         </ComboBox>
-      <TextArea opacity="0.5" prefHeight="200.0" prefWidth="200.0" text="Describe en qué consiste la actividad de tu empresa" />
+      <TextArea fx:id="descripcionField" opacity="0.5" prefHeight="200.0" prefWidth="200.0" promptText="Describe en qué consiste la actividad de tu empresa" />
 
         <!-- Botón de registro -->
         <Button fx:id="registrarButton" onAction="#registrarEmpresa" prefWidth="200" style="-fx-background-color: #4A90E2; -fx-text-fill: white; -fx-font-size: 14; -fx-background-radius: 8;" text="Registrar Empresa" />
