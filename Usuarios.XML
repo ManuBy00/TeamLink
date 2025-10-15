@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ListaUsuarios>
+    <Usuario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="empresa">
+        <email>juan</email>
+        <nombre>juan</nombre>
+        <password>$2a$10$JG6WQP0rG5x7e7PkzdJ8W.3bdb1cTAvWqCONiUMcf7eXqkN.eY2I2</password>
+        <direccion>juan</direccion>
+        <telefono>juan</telefono>
+        <descripcion>juan</descripcion>
+        <sector>juan</sector>
+    </Usuario>
+    <Usuario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="empleado">
+        <email>Juan</email>
+        <nombre>Juan</nombre>
+        <password>$2a$10$ltQqldN0nd8ObwERnF2VEubGciujYai1p8VfuKgG/qpwYYdgsmDr2</password>
+        <empresa>Juan</empresa>
+        <departamento>Juan</departamento>
+        <manager>true</manager>
+        <puesto>juan</puesto>
+    </Usuario>
+    <Usuario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="empresa">
+        <email>pepe</email>
+        <nombre>pepe</nombre>
+        <password>$2a$10$Nbd6vxI91tEttcC4FRo1oelQ5aKECfLk9/QZkHmAOXjpAKQq853he</password>
+        <direccion>pepe</direccion>
+        <telefono>pepe</telefono>
+        <descripcion>pepe</descripcion>
+        <sector>pepe</sector>
+    </Usuario>
+</ListaUsuarios>
