@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SelectionMode?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" prefHeight="450.0" prefWidth="400.0" spacing="15.0" style="-fx-background-color: #ECF0F1;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.Controller.GrupoFormController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <Label text="Crear Nuevo Grupo" textFill="#2C3E50">
+        <font>
+            <Font name="System Bold" size="24.0" />
+        </font>
+    </Label>
+
+    <VBox spacing="5.0">
+        <Label text="Nombre del Grupo:" style="-fx-font-weight: bold;" />
+        <TextField fx:id="nombreGrupoTextField" promptText="Escribe el nombre del nuevo grupo" />
+    </VBox>
+
+    <VBox spacing="5.0" VBox.vgrow="ALWAYS">
+        <Label text="Seleccionar Miembros:" style="-fx-font-weight: bold;" />
+        <ListView fx:id="miembrosGrupalListView" VBox.vgrow="ALWAYS">
+            <selectionModel>
+            </selectionModel>
+        </ListView>
+    </VBox>
+
+    <Button fx:id="crearGrupoButton" mnemonicParsing="false" onAction="#crearGrupo" prefWidth="150.0" style="-fx-background-color: #3498DB; -fx-text-fill: white; -fx-font-weight: bold;" text="Crear Grupo" />
+</VBox>

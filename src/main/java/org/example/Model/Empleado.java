@@ -23,4 +23,36 @@ public class Empleado extends Usuario{
     public Empleado(){
 
     }
+
+    public String getEmpresa() {
+        return empresa;
+    }
+
+    public String getDepartamento() {
+        return departamento;
+    }
+
+    public Boolean getManager() {
+        return manager;
+    }
+
+    public String getPuesto() {
+        return puesto;
+    }
+
+    public void setEmpresa(String empresa) {
+        this.empresa = empresa;
+    }
+
+    public void setDepartamento(String departamento) {
+        this.departamento = departamento;
+    }
+
+    public void setManager(Boolean manager) {
+        this.manager = manager;
+    }
+
+    public void setPuesto(String puesto) {
+        this.puesto = puesto;
+    }
 }

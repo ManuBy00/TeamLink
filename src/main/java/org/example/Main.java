@@ -17,14 +17,12 @@ import static javafx.application.Application.launch;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        //CARGAR USUARIOS XML
-        //LANZAR VISTA LOGIN
+
 
         UsuariosManager um = UsuariosManager.getInstance();
 
         for (Usuario u : um.getUsuariosList()){
             System.out.println(u.getNombre());
-
         }
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/teamlink/LoginView.fxml"));

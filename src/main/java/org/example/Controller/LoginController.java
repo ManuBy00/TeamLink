@@ -51,6 +51,18 @@ public class LoginController {
         if (u!=null){
             if (u.verificarPassword(password)){
                 Sesion.getInstance().logIn(u);
+
+                try{
+                    FXMLLoader mainView = new FXMLLoader(getClass().getResource("/org/example/teamlink/mainView.fxml"));
+                    Parent root = mainView.load();
+                    Scene scene = new Scene(root);
+                    Stage st = new Stage();
+                    st.setScene(scene);
+                    st.show();
+                }catch (IOException e){
+                    e.getMessage();
+                }
+
                 Utilidades.mostrarAlerta("OK", "LOGIN CORRECTO");
             }else {
                 Utilidades.mostrarAlerta("Contraseña incorrecta", "Las credenciales introducidas no coinciden");

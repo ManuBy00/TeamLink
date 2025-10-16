@@ -15,7 +15,9 @@ public class Test {
     public static void main(String[] args) {
         Usuario empresa = new Empresa("pepe", "pepe", "pepe", "pepe", "pepe", "pepe", "pepe");
 
-        Usuario empleado = new Empleado("Juan", "Juan", "Juan", "Juan", "Juan", true, "juan");
+        Usuario empleado = new Empleado("Empleado@admin.com", "empleado1", "empleado", "admin@gmail.com", "Marketing", true, "juan");
+
+
 
 
         UsuariosManager userManager = XML.readXML(UsuariosManager.class, "Usuarios.XML");
