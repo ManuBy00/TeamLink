@@ -1,39 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <ListaUsuarios>
     <Usuario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="empresa">
-        <email>ggg@gmail.com</email>
-        <nombre>ggg</nombre>
-        <password>$2a$10$dWYZJDU8RSKHbBcoDhz47u1d5FrSsKAkTvouzOPkWqB7gDEg.Bide</password>
-        <direccion>gg</direccion>
-        <telefono>ggg</telefono>
-        <descripcion>ggg</descripcion>
-        <sector>Educación</sector>
-    </Usuario>
-    <Usuario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="empresa">
-        <email>bbbb@gmail.com</email>
-        <nombre>bbbb</nombre>
-        <password>$2a$10$2XsV8XuMnibyVBNAidIf/OjAk/XjoOzCaKiSbGd0UCqA7L491UT0a</password>
-        <direccion>bbbb</direccion>
-        <telefono>bbbb</telefono>
-        <descripcion>bbbb</descripcion>
-        <sector>Educación</sector>
-    </Usuario>
-    <Usuario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="empresa">
         <email>admin@gmail.com</email>
         <nombre>admin</nombre>
-        <password>$2a$10$VP2oNVuxptkk2WdIB1kQGedI1pwenfm0Q62I5eavTjThJuTjO6lm.</password>
-        <direccion>admin</direccion>
-        <telefono>admin</telefono>
-        <descripcion>ada</descripcion>
+        <password>$2a$10$CWfRrqGh836W/4c.1yCTr.jSoPSjVHm9sN4CanOt6PvNU75md/z.i</password>
+        <direccion>000</direccion>
+        <telefono>000</telefono>
+        <descripcion>000</descripcion>
         <sector>Educación</sector>
+        <empleados>pepe@gmail.com</empleados>
+        <empleados>empleado@admin.com</empleados>
     </Usuario>
-    <Usuario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="empresa">
-        <email>ddaaa@gmail.com</email>
-        <nombre>aaaaa</nombre>
-        <password>$2a$10$FpZTPCw0LKmbLUGkMbLWo.kM/ks1ccmdWRTUaGl5lD6.BssPv8q2q</password>
-        <direccion>dda</direccion>
-        <telefono>ddaaa</telefono>
-        <descripcion>ddd</descripcion>
-        <sector>Educación</sector>
+    <Usuario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="empleado">
+        <email>pepe@gmail.com</email>
+        <nombre>pepe</nombre>
+        <password>$2a$10$V4NbwaV3AGyvMzWFaxODveb7yy1oJVahwn0cuXIPJXDN9CrL.E6dS</password>
+        <empresa>admin@gmail.com</empresa>
+        <departamento>000</departamento>
+        <manager>false</manager>
+        <puesto>00</puesto>
+    </Usuario>
+    <Usuario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="empleado">
+        <email>empleado@admin.com</email>
+        <nombre>empleado</nombre>
+        <password>$2a$10$7N4T4AmvFDPNnwGDST0bBu847BD4yDbv8WDyKmKe4XoqBHumnkDRe</password>
+        <empresa>admin@gmail.com</empresa>
+        <departamento>Finanzas</departamento>
+        <manager>false</manager>
+        <puesto>Contable</puesto>
     </Usuario>
 </ListaUsuarios>

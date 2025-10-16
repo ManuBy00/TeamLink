@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="500" prefWidth="480" style="-fx-background-color: linear-gradient(to bottom right, #4A90E2, #50E3C2);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.Controller.FormularioEmpresas">
+<AnchorPane prefHeight="500" prefWidth="480" style="-fx-background-color: linear-gradient(to bottom right, #4A90E2, #50E3C2);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.Controller.FormularioEmpresa">
 
     <VBox alignment="CENTER" spacing="15" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 30;" AnchorPane.bottomAnchor="40" AnchorPane.leftAnchor="50" AnchorPane.rightAnchor="50" AnchorPane.topAnchor="40">
         <Label text="Registro de Empresa" textFill="#333">

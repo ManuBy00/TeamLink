@@ -6,6 +6,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import org.example.CRUD.UsuariosManager;
+import org.example.DataAccess.XML;
 import org.example.Exceptions.ElementoRepetido;
 import org.example.Model.Empleado;
 import org.example.Model.Empresa;
@@ -78,9 +79,9 @@ public class CrearEmpleadoController {
             empresaActual.addEmpleado(nuevoEmpleado);
 
             // 4. Serializar (Guardar los cambios en el XML)
-            // Llama aquí a tu método para escribir en el XML (ej. XML.writeXML(UsuariosManager.getInstance(), "Usuarios.XML");)
+            XML.writeXML(UsuariosManager.getInstance(), "Usuarios.XML");
 
-            Utilidades.mostrarAlerta("Éxito", "Empleado " + nombre + " registrado con éxito en " + nombreEmpresa + ".");
+            Utilidades.mostrarAlerta("Éxito", "Empleado " + nombre + " registrado con éxito en " + empresa + ".");
 
             // 5. Cerrar el formulario
             // ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();

@@ -3,6 +3,7 @@ package org.example.CRUD;
 import org.example.DataAccess.XML;
 import org.example.Exceptions.ElementoNoEncontrado;
 import org.example.Exceptions.ElementoRepetido;
+import org.example.Model.Empleado;
 import org.example.Model.Usuario;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -10,6 +11,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @XmlRootElement(name = "ListaUsuarios")
@@ -26,6 +29,9 @@ public class UsuariosManager implements CRUD<Usuario>{
     public static UsuariosManager getInstance(){
         if (instance==null){
             instance = XML.readXML(UsuariosManager.class, "Usuarios.XML");
+            if (instance == null){
+                instance = new UsuariosManager();
+            }
         }
         return instance;
     }
@@ -80,5 +86,25 @@ public class UsuariosManager implements CRUD<Usuario>{
             }
         }
         return usuarioEncontrado;
+    }
+
+    /**
+     * Busca y devuelve una lista de objetos Empleado que pertenecen a una empresa específica.
+     * @param emailEmpresa El nombre de la empresa a la que deben pertenecer los empleados.
+     * @return Una List<Empleado> con los empleados encontrados. Nunca devuelve null.
+     */
+    public List<Empleado> buscarEmpleadosPorEmpresa(String emailEmpresa) {
+
+        // 1. Verificamos si la lista de usuarios está inicializada antes de usar el stream.
+        if (this.usuariosList == null) {
+            return List.of(); // Devuelve una lista inmutable vacía si la lista principal es null
+        }else{
+            List empleados = this.usuariosList.stream()
+                    .filter(u -> u instanceof Empleado) // Filtra solo objetos de tipo Empleado
+                    .map(u -> (Empleado) u)           // Hace el casting seguro a Empleado
+                    .filter(e -> e.getEmpresa().equals(emailEmpresa)) // Filtra por el nombre de la empresa
+                    .collect(Collectors.toList()); // Recolecta el resultado en una List<Empleado>
+            return empleados;
+        }
     }
 }

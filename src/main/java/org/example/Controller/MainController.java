@@ -26,6 +26,9 @@ public class MainController {
     private Button addChatButton;
 
     @FXML
+    private Button newEmpleadoButton;
+
+    @FXML
     private ListView<Chat> ChatList;
 
     Usuario usuarioIniciado = Sesion.getInstance().getUsuarioIniciado();
@@ -60,6 +63,16 @@ public class MainController {
     }
 
     public void crearEmpleado(ActionEvent actionEvent) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/teamlink/empleadoForm.fxml"));
+        try {
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 }

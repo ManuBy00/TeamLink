@@ -1,10 +1,7 @@
 package org.example.Controller;
 
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.example.CRUD.UsuariosManager;
@@ -14,7 +11,7 @@ import org.example.Model.Empresa;
 import org.example.Model.Usuario;
 import org.example.Utilities.Utilidades;
 
-public class FormularioEmpresas {
+public class FormularioEmpresa {
 
     @FXML
     private TextField nombreEmpresaField;

@@ -8,6 +8,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.util.Callback;
+import org.example.CRUD.UsuariosManager;
 import org.example.Model.*;
 import org.example.Utilities.Sesion;
 
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 
 public class GrupoFormController {
     @FXML
-    private TextField nombreGrupo;
+    private TextField nombreGrupoTextField;
 
     @FXML
     private ListView<Usuario> miembrosGrupalListView;
@@ -32,7 +33,8 @@ public class GrupoFormController {
         if (empresa.getEmpleados() == null){
 
         }else {
-            miembrosGrupalListView.setItems(FXCollections.observableArrayList(empresa.getEmpleados()));
+            List empleados = UsuariosManager.getInstance().buscarEmpleadosPorEmpresa(empresa.getEmail());
+            miembrosGrupalListView.setItems(FXCollections.observableArrayList(empleados));
         }
 
         //no se como va esto jaja
@@ -60,7 +62,7 @@ public class GrupoFormController {
 
     public ChatGrupal crearGrupo(ActionEvent actionEvent) {
         List<Usuario> usuariosGrupo = miembrosGrupalListView.getSelectionModel().getSelectedItems();
-        String nombre = nombreGrupo.getText();
+        String nombre = nombreGrupoTextField.getText();
 
         List<String> correosUsuarios = usuariosGrupo.stream().map(Usuario::getEmail).toList();
 
