@@ -4,11 +4,11 @@ import org.example.DataAccess.XML;
 import org.example.Exceptions.ElementoNoEncontrado;
 import org.example.Exceptions.ElementoRepetido;
 import org.example.Model.Chat;
+import org.example.Model.ChatPrivado;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 @XmlRootElement(name = "ListaConversaciones")
@@ -46,6 +46,11 @@ public class ChatsManager implements CRUD<Chat> {
         return instance;
     }
 
+    // Getter para la lista completa de chats
+    public List<Chat> getChatsList() {
+        return chatsList;
+    }
+
     /**
      * Devuelve el ID actual y lo incrementa para el próximo chat.
      * Método clave para la persistencia del ID secuencial.
@@ -62,7 +67,6 @@ public class ChatsManager implements CRUD<Chat> {
             throw new ElementoRepetido("Ya existe un chat con ID: " + chat.getChatID());
         }
         this.chatsList.add(chat);
-        // NOTA: Después de añadir/modificar, se debe llamar a XML.writeXML(instance, FILE_NAME);
     }
 
     @Override
@@ -72,15 +76,10 @@ public class ChatsManager implements CRUD<Chat> {
         if (chatAntiguo == null) {
             throw new ElementoNoEncontrado("Chat con ID " + chatActualizado.getChatID() + " no encontrado para actualizar.");
         }
-
-        // La actualización de un chat es compleja, ya que la lista de mensajes es una de sus propiedades.
-        // El enfoque más simple es:
         this.chatsList.remove(chatAntiguo);
         this.chatsList.add(chatActualizado);
 
-        // NOTA: En la práctica, si el mensaje se añade al objeto 'chatAntiguo' y ese objeto es el mismo
-        // que está en la lista (si no haces deep copy), la lista se actualiza automáticamente.
-        // Pero esta remoción/adición asegura que cualquier cambio en la metadata se refleje.
+
     }
 
     @Override
@@ -97,24 +96,43 @@ public class ChatsManager implements CRUD<Chat> {
 
 
     public Chat buscarChatPorId(int chatId) {
-        return this.chatsList.stream()
-                .filter(c -> c.getChatID() == chatId)
-                .findFirst()
-                .orElse(null);
+
+        Chat chatEncontrado = this.chatsList.stream().filter(c -> c.getChatID() == chatId).findFirst().orElse(null);
+        return chatEncontrado;
     }
 
+    /**
+     * Busca un ChatPrivado que contenga exactamente a los dos usuarios dados.
+     * Implementación usando bucle for-each y Set.
+     * @param email1 Email del primer usuario.
+     * @param email2 Email del segundo usuario.
+     * @return El objeto ChatPrivado si se encuentra, o null.
+     */
+    public ChatPrivado buscarChatPrivadoPorParticipantes(String email1, String email2) {
 
-    public Chat buscar(String idString) {
-        try {
-            return buscarChatPorId(Integer.parseInt(idString));
-        } catch (NumberFormatException e) {
-            return null;
+        // 1. Crear el conjunto 'target' (objetivo) de los dos emails que buscamos.
+        Set<String> targetEmails = new HashSet<>();
+        targetEmails.add(email1);
+        targetEmails.add(email2);
+
+        // 2. Iterar sobre todos los chats en la lista central.
+        for (Chat chat : this.chatsList) {
+            // 3. Verificar si el chat actual es de tipo ChatPrivado.
+            if (chat instanceof ChatPrivado chatPrivado) {
+                // 4. Obtener los emails del chat que estamos revisando.
+                Set<String> currentChatEmails = new HashSet<>();
+                        currentChatEmails.add(chatPrivado.getUsuario1Email());
+                        currentChatEmails.add(chatPrivado.getUsuario2Email());
+
+                // 5. Verificar si los dos conjuntos son iguales.
+                if (currentChatEmails.equals(targetEmails)) {
+                    // Si los sets son iguales (mismos emails), hemos encontrado el chat.
+                    return chatPrivado;
+                }
+            }
         }
-    }
-
-    // Getter para la lista completa de chats
-    public List<Chat> getChatsList() {
-        return chatsList;
+        // 6. Si el bucle termina, el chat no existe.
+        return null;
     }
 
     // --- Métodos obligatorios de la interfaz (dejados vacíos por ahora) ---
@@ -122,6 +140,4 @@ public class ChatsManager implements CRUD<Chat> {
     @Override
     public void mostrar(Chat elemento) { /* ... */ }
 
-    @Override
-    public void cargarXML(String fileName) { /* La lógica está en getInstance() */ }
 }

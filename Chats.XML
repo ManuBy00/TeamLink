@@ -2,7 +2,23 @@
 <ListaConversaciones>
     <Chat xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="chatGrupal">
         <chatID>0</chatID>
-        <ListaDeMensajes/>
+        <ListaDeMensajes>
+            <Mensaje>
+                <Contenido>aa</Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:49:17.9265224</FechaHora>
+            </Mensaje>
+            <Mensaje>
+                <Contenido>hola buenas tardes</Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:50:52.6867932</FechaHora>
+            </Mensaje>
+            <Mensaje>
+                <Contenido></Contenido>
+                <RemitenteEmail>empleado@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:56:13.4516963</FechaHora>
+            </Mensaje>
+        </ListaDeMensajes>
         <nombreGrupo>Finanzas</nombreGrupo>
         <MiembrosDelGrupo>
             <Email>empleado@gmail.com</Email>
@@ -12,7 +28,19 @@
     </Chat>
     <Chat xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="chatGrupal">
         <chatID>1</chatID>
-        <ListaDeMensajes/>
+        <ListaDeMensajes>
+            <Mensaje>
+                <Contenido>a
+</Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:54:10.3764259</FechaHora>
+            </Mensaje>
+            <Mensaje>
+                <Contenido>Buenas dflñkajsdf lñakjs sdalkf jasdlñkf jasdlñkfj asdñlkfj asldkfj aslñdkfjas ldkfjasdklf asdlkfj asddlkfja sdfklasdjf alksdjf aslñkdfj asdlñkfjas ñldkfjasdf asdf asdf asdf </Contenido>
+                <RemitenteEmail>empleado@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:55:08.5530463</FechaHora>
+            </Mensaje>
+        </ListaDeMensajes>
         <nombreGrupo>Comercio</nombreGrupo>
         <MiembrosDelGrupo>
             <Email>empleado@gmail.com</Email>
@@ -21,12 +49,167 @@
     </Chat>
     <Chat xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="chatGrupal">
         <chatID>2</chatID>
-        <ListaDeMensajes/>
+        <ListaDeMensajes>
+            <Mensaje>
+                <Contenido>a</Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:54:12.877676</FechaHora>
+            </Mensaje>
+            <Mensaje>
+                <Contenido></Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:54:13.5042816</FechaHora>
+            </Mensaje>
+            <Mensaje>
+                <Contenido>a</Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:54:15.1013542</FechaHora>
+            </Mensaje>
+            <Mensaje>
+                <Contenido>a</Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:54:15.9310973</FechaHora>
+            </Mensaje>
+            <Mensaje>
+                <Contenido>a</Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:54:16.8932762</FechaHora>
+            </Mensaje>
+            <Mensaje>
+                <Contenido>a</Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:54:17.6222488</FechaHora>
+            </Mensaje>
+            <Mensaje>
+                <Contenido>a</Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:54:18.295319</FechaHora>
+            </Mensaje>
+            <Mensaje>
+                <Contenido>a</Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:54:18.9793704</FechaHora>
+            </Mensaje>
+            <Mensaje>
+                <Contenido>aa</Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:54:21.9153477</FechaHora>
+            </Mensaje>
+            <Mensaje>
+                <Contenido></Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:54:22.5814276</FechaHora>
+            </Mensaje>
+            <Mensaje>
+                <Contenido></Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:54:22.7492472</FechaHora>
+            </Mensaje>
+            <Mensaje>
+                <Contenido></Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:54:22.9133163</FechaHora>
+            </Mensaje>
+            <Mensaje>
+                <Contenido></Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:54:23.0669231</FechaHora>
+            </Mensaje>
+            <Mensaje>
+                <Contenido></Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:54:23.2524587</FechaHora>
+            </Mensaje>
+            <Mensaje>
+                <Contenido></Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:54:23.4264292</FechaHora>
+            </Mensaje>
+            <Mensaje>
+                <Contenido></Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:54:23.6012913</FechaHora>
+            </Mensaje>
+            <Mensaje>
+                <Contenido></Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:54:23.7879903</FechaHora>
+            </Mensaje>
+            <Mensaje>
+                <Contenido></Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:54:23.9584891</FechaHora>
+            </Mensaje>
+            <Mensaje>
+                <Contenido></Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:54:24.1320646</FechaHora>
+            </Mensaje>
+            <Mensaje>
+                <Contenido></Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:54:24.2912972</FechaHora>
+            </Mensaje>
+            <Mensaje>
+                <Contenido></Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T17:54:24.4777938</FechaHora>
+            </Mensaje>
+        </ListaDeMensajes>
         <nombreGrupo>prueba</nombreGrupo>
         <MiembrosDelGrupo>
             <Email>empleado2@gmail.com</Email>
         </MiembrosDelGrupo>
         <emailEmpresa>admin@gmail.com</emailEmpresa>
     </Chat>
-    <NextChatID>3</NextChatID>
+    <Chat xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="chatGrupal">
+        <chatID>3</chatID>
+        <ListaDeMensajes/>
+        <nombreGrupo>asd</nombreGrupo>
+        <MiembrosDelGrupo>
+            <Email>empleado@gmail.com</Email>
+        </MiembrosDelGrupo>
+        <emailEmpresa>admin@gmail.com</emailEmpresa>
+    </Chat>
+    <Chat xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="chatGrupal">
+        <chatID>4</chatID>
+        <ListaDeMensajes>
+            <Mensaje>
+                <Contenido>buenas
+</Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T18:56:45.2896735</FechaHora>
+            </Mensaje>
+        </ListaDeMensajes>
+        <nombreGrupo>pru3eab</nombreGrupo>
+        <MiembrosDelGrupo>
+            <Email>empleado@gmail.com</Email>
+        </MiembrosDelGrupo>
+        <emailEmpresa>admin@gmail.com</emailEmpresa>
+    </Chat>
+    <Chat xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="chatPrivado">
+        <chatID>5</chatID>
+        <ListaDeMensajes>
+            <Mensaje>
+                <Contenido>buenas tardes</Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-18T19:10:14.9265955</FechaHora>
+            </Mensaje>
+        </ListaDeMensajes>
+        <Usuario1Email>admin@gmail.com</Usuario1Email>
+        <Usuario2Email>empleado@gmail.com</Usuario2Email>
+    </Chat>
+    <Chat xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="chatPrivado">
+        <chatID>6</chatID>
+        <ListaDeMensajes/>
+        <Usuario1Email>admin@gmail.com</Usuario1Email>
+        <Usuario2Email>empleado2@gmail.com</Usuario2Email>
+    </Chat>
+    <Chat xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="chatPrivado">
+        <chatID>7</chatID>
+        <ListaDeMensajes/>
+        <Usuario1Email>empleado@gmail.com</Usuario1Email>
+        <Usuario2Email>empleado@gmail.com</Usuario2Email>
+    </Chat>
+    <NextChatID>8</NextChatID>
 </ListaConversaciones>

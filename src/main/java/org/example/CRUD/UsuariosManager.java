@@ -76,11 +76,6 @@ public class UsuariosManager implements CRUD<Usuario>{
 
     }
 
-    @Override
-    public void cargarXML(String fileName) {
-
-    }
-
     public Usuario buscarUsuario(String email){
         Usuario usuarioEncontrado = null;
         for (Usuario usuario : usuariosList){
@@ -104,7 +99,7 @@ public class UsuariosManager implements CRUD<Usuario>{
         }else{
             List empleados = this.usuariosList.stream()
                     .filter(u -> u instanceof Empleado) // Filtra solo objetos de tipo Empleado
-                    .map(u -> (Empleado) u)           // Hace el casting seguro a Empleado
+                    .map(u -> (Empleado) u)           // Hace el casting a Empleado
                     .filter(e -> e.getEmpresa().equals(emailEmpresa)) // Filtra por el nombre de la empresa
                     .collect(Collectors.toList()); // Recolecta el resultado en una List<Empleado>
             return empleados;

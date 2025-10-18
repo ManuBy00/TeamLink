@@ -24,7 +24,7 @@ public class ChatPrivado extends Chat {
 
     public ChatPrivado(String usuario1Email, String usuario2Email) {
         // Llama al constructor de la clase padre (Chat), que inicializa la lista de mensajes
-        super();
+        super(true);
         this.usuario1Email = usuario1Email;
         this.usuario2Email = usuario2Email;
     }

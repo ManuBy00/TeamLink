@@ -13,5 +13,4 @@ public interface CRUD <T>{
 
     void mostrar(T elemento);
 
-    void cargarXML(String fileName);
 }

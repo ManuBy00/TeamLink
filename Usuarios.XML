@@ -7,6 +7,10 @@
         <ListaDeChatIDs>
             <ChatID>0</ChatID>
             <ChatID>1</ChatID>
+            <ChatID>3</ChatID>
+            <ChatID>4</ChatID>
+            <ChatID>5</ChatID>
+            <ChatID>7</ChatID>
         </ListaDeChatIDs>
         <empresa>admin@gmail.com</empresa>
         <departamento>0900</departamento>
@@ -21,6 +25,10 @@
             <ChatID>0</ChatID>
             <ChatID>1</ChatID>
             <ChatID>2</ChatID>
+            <ChatID>3</ChatID>
+            <ChatID>4</ChatID>
+            <ChatID>5</ChatID>
+            <ChatID>6</ChatID>
         </ListaDeChatIDs>
         <direccion>000</direccion>
         <telefono>000</telefono>
@@ -38,6 +46,7 @@
         <ListaDeChatIDs>
             <ChatID>0</ChatID>
             <ChatID>2</ChatID>
+            <ChatID>6</ChatID>
         </ListaDeChatIDs>
         <empresa>admin@gmail.com</empresa>
         <departamento>000</departamento>

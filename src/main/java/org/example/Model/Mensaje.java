@@ -1,6 +1,9 @@
 package org.example.Model;
 
+import org.example.DataAccess.LocalDateTimeAdapter;
+
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalDateTime;
 
 public class Mensaje {
@@ -11,6 +14,7 @@ public class Mensaje {
     private String remitenteEmail; // Usamos el email para identificar al remitente
 
     @XmlElement(name = "FechaHora")
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     private LocalDateTime fechaHora;
 
 

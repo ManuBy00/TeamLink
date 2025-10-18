@@ -27,4 +27,6 @@ module org.example.teamlink {
 
     // 4. ¡AÑADIDO CRUCIAL! Exporta el paquete CRUD para que otras clases puedan acceder a Managers y excepciones.
     exports org.example.CRUD;
+
+    opens org.example.DataAccess;
 }

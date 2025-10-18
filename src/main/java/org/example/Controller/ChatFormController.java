@@ -12,12 +12,11 @@ import org.example.DataAccess.XML;
 import org.example.Exceptions.ElementoRepetido;
 import org.example.Model.*;
 import org.example.Utilities.Sesion;
+import org.example.Utilities.Utilidades;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class GrupoFormController {
+public class ChatFormController {
     @FXML
     public Button crearGrupoButton;
 
@@ -27,19 +26,26 @@ public class GrupoFormController {
     @FXML
     private ListView<Usuario> miembrosGrupalListView;
 
-    private Empresa empresa = (Empresa)Sesion.getInstance().getUsuarioIniciado();
+    private Usuario usuarioIniciado = Sesion.getInstance().getUsuarioIniciado();
+
 
 
     @FXML
     public void initialize() {
         miembrosGrupalListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        //llenamos la listview con los empleados de la empresa
-        if (empresa.getEmpleados() == null){
-
-        }else {
-            List empleados = UsuariosManager.getInstance().buscarEmpleadosPorEmpresa(empresa.getEmail());
+        if (usuarioIniciado instanceof Empresa){
+            if (((Empresa) usuarioIniciado).getEmpleados() == null){
+                Utilidades.mostrarAlerta("Alerta", "No hay usuarios disponibles");
+            }else {
+                List empleados = UsuariosManager.getInstance().buscarEmpleadosPorEmpresa(usuarioIniciado.getEmail());
+                miembrosGrupalListView.setItems(FXCollections.observableArrayList(empleados));
+            }
+        }else{
+            List empleados = UsuariosManager.getInstance().buscarEmpleadosPorEmpresa(((Empleado)usuarioIniciado).getEmpresa());
+            empleados.remove(usuarioIniciado);
             miembrosGrupalListView.setItems(FXCollections.observableArrayList(empleados));
         }
+
 
         //no se como va esto jaja
         miembrosGrupalListView.setCellFactory(new Callback<ListView<Usuario>, ListCell<Usuario>>() {
@@ -73,7 +79,7 @@ public class GrupoFormController {
         List<String> correosUsuarios = usuariosGrupo.stream().map(Usuario::getEmail).toList();
 
 
-        ChatGrupal grupo = new ChatGrupal(nombre, correosUsuarios, empresa.getEmail());
+        ChatGrupal grupo = new ChatGrupal(nombre, correosUsuarios, usuarioIniciado.getEmail());
         try {
             cm.add(grupo);
         } catch (ElementoRepetido e) {
@@ -81,7 +87,7 @@ public class GrupoFormController {
         }
 
         // Añadir el ID a todos los miembros (usando el UsuariosManager para buscarlos)
-        empresa.getChatsID().add(grupo.getChatID());
+        usuarioIniciado.getChatsID().add(grupo.getChatID());
         for (String email : correosUsuarios) {
             Usuario u = UsuariosManager.getInstance().buscarUsuario(email);
             if (u != null) {
@@ -93,10 +99,35 @@ public class GrupoFormController {
         XML.writeXML(cm, "Chats.XML");
         XML.writeXML(UsuariosManager.getInstance(), "Usuarios.XML");
 
-
         Stage stage = (Stage) ((javafx.scene.Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
 
         return grupo;
+    }
+
+    public void crearChatPrivado(ActionEvent actionEvent) {
+        ChatsManager cm = ChatsManager.getInstance();
+        Usuario usuarioActual = Sesion.getInstance().getUsuarioIniciado();
+        Usuario usuario2 = miembrosGrupalListView.getSelectionModel().getSelectedItem();
+
+        if (cm.buscarChatPrivadoPorParticipantes(usuarioActual.getEmail(), usuario2.getEmail()) !=null){
+            Utilidades.mostrarAlerta("Error", "Ya existe un chat con este usuario");
+            return;
+        }
+
+        ChatPrivado nuevoChat = new ChatPrivado(usuarioActual.getEmail(), usuario2.getEmail());
+        try {
+            cm.add(nuevoChat);
+        } catch (ElementoRepetido e) {
+            throw new RuntimeException(e);
+        }
+        usuarioActual.getChatsID().add(nuevoChat.getChatID());
+        usuario2.getChatsID().add(nuevoChat.getChatID());
+
+        XML.writeXML(cm, "Chats.XML");
+        XML.writeXML(UsuariosManager.getInstance(), "Usuarios.XML");
+
+        Stage stage = (Stage) ((javafx.scene.Node) actionEvent.getSource()).getScene().getWindow();
+        stage.close();
     }
 }
