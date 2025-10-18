@@ -20,6 +20,7 @@ public class UsuariosManager implements CRUD<Usuario>{
     @XmlElement(name="Usuario")
     private HashSet<Usuario> usuariosList;
     static UsuariosManager instance;
+    private static final String FILE_NAME = "Usuarios.XML"; // Nombre del archivo XML
 
 
     private UsuariosManager() {
@@ -28,8 +29,10 @@ public class UsuariosManager implements CRUD<Usuario>{
 
     public static UsuariosManager getInstance(){
         if (instance==null){
-            instance = XML.readXML(UsuariosManager.class, "Usuarios.XML");
+            instance = XML.readXML(UsuariosManager.class, FILE_NAME);
+            //si la lectura falla o el archivo está vacío, crea una instancia desde cero.
             if (instance == null){
+                System.out.println("ADVERTENCIA: Archivo " + FILE_NAME + " no encontrado o vacío. Creando nuevo UsuariosManager.");
                 instance = new UsuariosManager();
             }
         }

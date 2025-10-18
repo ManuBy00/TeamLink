@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" prefHeight="550.0" prefWidth="450.0" spacing="15.0" style="-fx-background-color: #ECF0F1;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.Controller.CrearEmpleadoController">
+<VBox alignment="TOP_CENTER" prefHeight="550.0" prefWidth="450.0" spacing="15.0" style="-fx-background-color: #ECF0F1;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.Controller.EmpleadoFormController">
     <padding>
         <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
     </padding>
@@ -47,6 +47,6 @@
     </GridPane>
 
     <VBox alignment="CENTER" spacing="10.0">
-        <Button mnemonicParsing="false" onAction="#handleRegistrarEmpleado" prefWidth="200.0" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-weight: bold;" text="Registrar Empleado" />
+        <Button mnemonicParsing="false" onAction="#RegistrarEmpleado" prefWidth="200.0" style="-fx-background-color: #2ECC71; -fx-text-fill: white; -fx-font-weight: bold;" text="Registrar Empleado" />
     </VBox>
 </VBox>

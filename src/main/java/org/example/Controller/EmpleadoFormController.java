@@ -2,9 +2,11 @@ package org.example.Controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import org.example.CRUD.UsuariosManager;
 import org.example.DataAccess.XML;
 import org.example.Exceptions.ElementoRepetido;
@@ -13,7 +15,7 @@ import org.example.Model.Empresa;
 import org.example.Utilities.Sesion;
 import org.example.Utilities.Utilidades;
 
-public class CrearEmpleadoController {
+public class EmpleadoFormController {
 
     @FXML
     private TextField emailField;
@@ -36,15 +38,14 @@ public class CrearEmpleadoController {
         if (Sesion.getInstance().getUsuarioIniciado() instanceof Empresa) {
             empresaActual = (Empresa) Sesion.getInstance().getUsuarioIniciado();
         } else {
-            // Manejar caso donde un Empleado intenta abrir este formulario
+
             Utilidades.mostrarAlerta("Acceso Denegado", "Solo las cuentas de Empresa pueden registrar nuevos empleados.");
-            // Cierra la ventana si el usuario no es una Empresa
-            // ((Stage) emailField.getScene().getWindow()).close();
+            ((Stage) emailField.getScene().getWindow()).close();
         }
     }
 
     @FXML
-    private void handleRegistrarEmpleado(ActionEvent event) {
+    private void RegistrarEmpleado(ActionEvent event) {
         if (empresaActual == null) {
             Utilidades.mostrarAlerta("Error de Sesión", "No se pudo obtener la información de la empresa logueada.");
             return;
@@ -61,7 +62,6 @@ public class CrearEmpleadoController {
         // El nombre de la empresa se toma del usuario logueado
         String empresa = empresaActual.getEmail();
 
-        // 2. Validación simple
         if (email.isEmpty() || nombre.isEmpty() || password.isEmpty() || departamento.isEmpty() || puesto.isEmpty()) {
             Utilidades.mostrarAlerta("Datos Incompletos", "Todos los campos son obligatorios.");
             return;
@@ -84,7 +84,7 @@ public class CrearEmpleadoController {
             Utilidades.mostrarAlerta("Éxito", "Empleado " + nombre + " registrado con éxito en " + empresa + ".");
 
             // 5. Cerrar el formulario
-            // ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
+            ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
 
         } catch (ElementoRepetido e) {
             Utilidades.mostrarAlerta("Error de Registro", e.getMessage());

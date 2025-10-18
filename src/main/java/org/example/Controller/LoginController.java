@@ -3,6 +3,7 @@ package org.example.Controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
@@ -51,7 +52,6 @@ public class LoginController {
         if (u!=null){
             if (u.verificarPassword(password)){
                 Sesion.getInstance().logIn(u);
-
                 try{
                     FXMLLoader mainView = new FXMLLoader(getClass().getResource("/org/example/teamlink/mainView.fxml"));
                     Parent root = mainView.load();
@@ -59,6 +59,8 @@ public class LoginController {
                     Stage st = new Stage();
                     st.setScene(scene);
                     st.show();
+                    Stage stage = (Stage) ((javafx.scene.Node) actionEvent.getSource()).getScene().getWindow();
+                    stage.close();
                 }catch (IOException e){
                     e.getMessage();
                 }

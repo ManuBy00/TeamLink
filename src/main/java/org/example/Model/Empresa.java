@@ -7,30 +7,41 @@ import org.example.Exceptions.ElementoRepetido;
 import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Set;
 
 @XmlRootElement(name="Empresa")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Empresa extends Usuario{
-    private  String direccion;
+
+    // --- Atributos Propios de Empresa ---
+    private String direccion;
     private String telefono;
     private String descripcion;
     private String sector;
+    @XmlElementWrapper(name = "ListaEmpleadosEmails")
+    @XmlElement(name = "EmailEmpleado")
     private HashSet<String> empleados;
-    private ArrayList<Chat> chats;
 
+
+    // Constructor completo
     public Empresa(String email, String nombre, String password, String direccion, String telefono, String descripcion, String sector) {
-        super(email, nombre, password);
+        super(email, nombre, password); // Llama al constructor de Usuario (que inicializa chatIds)
         this.direccion = direccion;
         this.telefono = telefono;
         this.sector = sector;
         this.descripcion = descripcion;
-
         this.empleados = new HashSet<>();
-        this.chats = new ArrayList<>();
     }
 
+    // Constructor para JAXB (inicializa las colecciones)
     public Empresa(){
+        // Llama al constructor de Usuario (que inicializa chatIds)
+        super();
+        // Inicialización crucial para evitar NullPointerException
+        this.empleados = new HashSet<>();
     }
+
+    // --- Getters y Setters de Atributos Propios ---
 
     public String getDireccion() {
         return direccion;
@@ -64,7 +75,9 @@ public class Empresa extends Usuario{
         this.sector = sector;
     }
 
-    public HashSet<String> getEmpleados() {
+    // --- Métodos de Gestión de Empleados ---
+
+    public Set<String> getEmpleados() {
         return empleados;
     }
 
@@ -72,75 +85,64 @@ public class Empresa extends Usuario{
         this.empleados = empleados;
     }
 
-    public ArrayList<Chat> getChats() {
-        return chats;
-    }
+    // NOTA: Se eliminan los getters/setters obsoletos de ArrayList<Chat>
 
-    public void setChats(ArrayList<Chat> chats) {
-        this.chats = chats;
-    }
-
+    // C - CREATE
     public void addEmpleado(Empleado empleado) throws ElementoRepetido {
-        // HashSet usa el método equals() (basado en el email) para verificar duplicados.
-        if (this.empleados.contains(empleado)) {
+        // La comprobación de duplicados se hace con el email (que es la String en el HashSet)
+        if (this.empleados.contains(empleado.getEmail())) {
             throw new ElementoRepetido("Ya existe un empleado con el email: " + empleado.getEmail());
         }
+        // Agrega SOLO el email (la referencia)
         this.empleados.add(empleado.getEmail());
     }
 
-    /**
-     * R - READ: Busca y devuelve un empleado por su email.
-     * @param emailBuscado El email del empleado a buscar.
-     * @return El objeto Empleado encontrado, o null si no existe.
-     */
+    // R - READ (Referencia y Búsqueda en el gestor central)
     public Empleado buscarEmpleadoEnEmpresa(String emailBuscado) {
         if (this.empleados.contains(emailBuscado)) {
-            Usuario em = UsuariosManager.getInstance().buscarUsuario(emailBuscado);
-            if (em != null && em instanceof Empleado) {
-                return (Empleado) em;
+            Usuario usuarioEncontrado = UsuariosManager.getInstance().buscarUsuario(emailBuscado);
+            if (usuarioEncontrado != null && usuarioEncontrado instanceof Empleado) {
+                return (Empleado) usuarioEncontrado;
             }
         }
         return null;
     }
 
-        /**
-         * U - UPDATE: Actualiza la información de un empleado.
-         * 1. Verifica que la referencia del empleado exista en la empresa.
-         * 2. Delega la actualización del objeto completo al UsuariosManager.
-         * @param empleadoActualizado El objeto Empleado con la nueva información.
-         * @throws ElementoNoEncontrado si la referencia del empleado no se encuentra en la empresa o en el gestor central.
-         */
-        public void updateEmpleado(Empleado empleadoActualizado) throws ElementoNoEncontrado {
-            String emailBuscado = empleadoActualizado.getEmail();
+    // U - UPDATE (Delega la actualización al gestor central)
+    public void updateEmpleado(Empleado empleadoActualizado) throws ElementoNoEncontrado {
+        String emailBuscado = empleadoActualizado.getEmail();
 
-            // 1. Verificar la referencia local (solo el email)
-            if (!this.empleados.contains(emailBuscado)) {
-                // Si el email no está en nuestra lista de referencias, el empleado no pertenece a la empresa
-                throw new ElementoNoEncontrado("No se puede actualizar. El email " + emailBuscado +
-                        " no está registrado como empleado de esta empresa.");
-            }
-
-            // 2. Si la referencia existe, actualizamos el objeto completo en el gestor central
-            try {
-                UsuariosManager.getInstance().update(empleadoActualizado);
-            } catch (ElementoNoEncontrado e) {
-                // Capturamos la excepción del gestor central y la relanzamos
-                throw new ElementoNoEncontrado("Error al actualizar: El objeto empleado no fue encontrado en el sistema central.");
-            }
+        // 1. Verificar la referencia local (solo el email)
+        if (!this.empleados.contains(emailBuscado)) {
+            throw new ElementoNoEncontrado("No se puede actualizar. El email " + emailBuscado +
+                    " no está registrado como empleado de esta empresa.");
         }
 
-    /**
-     * D - DELETE: Elimina un empleado por su email.
-     * @param email El email del empleado a eliminar.
-     * @throws ElementoNoEncontrado si el empleado no se encuentra.
-     */
+        // 2. Si la referencia existe, actualizamos el objeto completo en el gestor central
+        try {
+            UsuariosManager.getInstance().update(empleadoActualizado);
+        } catch (ElementoNoEncontrado e) {
+            // Se relanza si el gestor central no lo encuentra (inconsistencia de datos)
+            throw new ElementoNoEncontrado("Error al actualizar: El objeto empleado no fue encontrado en el sistema central.");
+        }
+        // No se requiere modificar this.empleados ya que el email (referencia) no ha cambiado.
+    }
+
+    // D - DELETE
     public void removeEmpleado(String email) throws ElementoNoEncontrado {
-        Empleado empleadoAEliminar = buscarEmpleadoEnEmpresa(email);
-
-        if (empleadoAEliminar == null) {
-            throw new ElementoNoEncontrado("No se puede eliminar. Empleado con email " + email + " no encontrado.");
+        // Verificamos si la referencia existe localmente
+        if (!this.empleados.contains(email)) {
+            throw new ElementoNoEncontrado("No se puede eliminar. Empleado con email " + email + " no encontrado en la empresa.");
         }
 
-        this.empleados.remove(empleadoAEliminar);
+        // El empleado debe ser eliminado del sistema central (UsuariosManager) también,
+        // pero esa responsabilidad es mejor dejarla en el controlador o una capa de servicio.
+
+        // 1. Elimina la referencia local
+        this.empleados.remove(email);
+
+        // 2. NOTA: Aquí se debería llamar a UsuariosManager.getInstance().remove(email)
+        // para eliminar el objeto Usuario completo del sistema central.
+        // Esto se hace fuera de la clase Empresa para mantener su responsabilidad limpia.
     }
 }

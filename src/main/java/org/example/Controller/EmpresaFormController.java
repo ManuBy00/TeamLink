@@ -11,7 +11,7 @@ import org.example.Model.Empresa;
 import org.example.Model.Usuario;
 import org.example.Utilities.Utilidades;
 
-public class FormularioEmpresa {
+public class EmpresaFormController {
 
     @FXML
     private TextField nombreEmpresaField;

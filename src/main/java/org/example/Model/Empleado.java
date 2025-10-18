@@ -21,7 +21,7 @@ public class Empleado extends Usuario{
     }
 
     public Empleado(){
-
+        super();
     }
 
     public String getEmpresa() {

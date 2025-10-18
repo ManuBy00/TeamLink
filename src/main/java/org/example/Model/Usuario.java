@@ -2,10 +2,8 @@ package org.example.Model;
 
 import org.example.Utilities.Seguridad;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.*;
+import java.util.HashSet;
 import java.util.Objects;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -16,12 +14,16 @@ public abstract class Usuario {
     private String email;
     private String nombre;
     private String password;
+    @XmlElementWrapper(name = "ListaDeChatIDs")
+    @XmlElement(name = "ChatID")
+    private HashSet<Integer> chatsID;
 
 
     public Usuario(String email, String nombre, String password) {
         this.email = email;
         this.nombre = nombre;
         this.password = Seguridad.hashPassword(password);
+        this.chatsID = new HashSet<>();
     }
 
     public Usuario() {
@@ -50,6 +52,14 @@ public abstract class Usuario {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public HashSet<Integer> getChatsID() {
+        return chatsID;
+    }
+
+    public void setChatsID(HashSet<Integer> chatsID) {
+        this.chatsID = chatsID;
     }
 
     public boolean verificarPassword(String password){

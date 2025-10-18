@@ -1,34 +1,32 @@
 package org.example.Model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @XmlRootElement(name = "ChatGrupal")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ChatGrupal extends Chat{
-    // Nombre que se mostrará en la interfaz para identificar el grupo
-    @XmlElement(name = "NombreGrupo")
+
     private String nombreGrupo;
 
-    // Lista de emails de todos los miembros del grupo
-    @XmlElement(name = "MiembrosEmails")
+    @XmlElementWrapper(name = "MiembrosDelGrupo")
+    @XmlElement(name = "Email")
     private ArrayList<String> miembrosEmails;
 
+    private String emailEmpresa;
 
     // Constructor para JAXB
    public ChatGrupal(){
 
    }
 
-    public ChatGrupal(String nombreGrupo, List<String> miembrosEmails) {
+    public ChatGrupal(String nombreGrupo, List<String> miembrosEmails, String emailEmpresa) {
         // Llama al constructor de la clase padre (Chat)
-        super();
+        super(true);
         this.nombreGrupo = nombreGrupo;
         this.miembrosEmails = new ArrayList<>(miembrosEmails);
+        this.emailEmpresa = emailEmpresa;
     }
 
     // Getters
@@ -38,5 +36,21 @@ public class ChatGrupal extends Chat{
 
     public ArrayList<String> getMiembrosEmails() {
         return miembrosEmails;
+    }
+
+    public void setNombreGrupo(String nombreGrupo) {
+        this.nombreGrupo = nombreGrupo;
+    }
+
+    public void setMiembrosEmails(ArrayList<String> miembrosEmails) {
+        this.miembrosEmails = miembrosEmails;
+    }
+
+    public String getEmailEmpresa() {
+        return emailEmpresa;
+    }
+
+    public void setEmailEmpresa(String emailEmpresa) {
+        this.emailEmpresa = emailEmpresa;
     }
 }

@@ -21,8 +21,6 @@ public class Main extends Application {
 
         UsuariosManager um = UsuariosManager.getInstance();
 
-        
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/teamlink/LoginView.fxml"));
 
         Parent root = loader.load();

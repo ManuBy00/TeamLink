@@ -3,12 +3,13 @@ package org.example.Controller;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.example.CRUD.ChatsManager;
 import org.example.CRUD.UsuariosManager;
+import org.example.DataAccess.XML;
+import org.example.Exceptions.ElementoRepetido;
 import org.example.Model.*;
 import org.example.Utilities.Sesion;
 
@@ -17,6 +18,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class GrupoFormController {
+    @FXML
+    public Button crearGrupoButton;
+
     @FXML
     private TextField nombreGrupoTextField;
 
@@ -61,12 +65,37 @@ public class GrupoFormController {
     }
 
     public ChatGrupal crearGrupo(ActionEvent actionEvent) {
+        ChatsManager cm = ChatsManager.getInstance();
+
         List<Usuario> usuariosGrupo = miembrosGrupalListView.getSelectionModel().getSelectedItems();
         String nombre = nombreGrupoTextField.getText();
 
         List<String> correosUsuarios = usuariosGrupo.stream().map(Usuario::getEmail).toList();
 
-        ChatGrupal grupo = new ChatGrupal(nombre, correosUsuarios);
+
+        ChatGrupal grupo = new ChatGrupal(nombre, correosUsuarios, empresa.getEmail());
+        try {
+            cm.add(grupo);
+        } catch (ElementoRepetido e) {
+            throw new RuntimeException(e);
+        }
+
+        // Añadir el ID a todos los miembros (usando el UsuariosManager para buscarlos)
+        empresa.getChatsID().add(grupo.getChatID());
+        for (String email : correosUsuarios) {
+            Usuario u = UsuariosManager.getInstance().buscarUsuario(email);
+            if (u != null) {
+                u.getChatsID().add(grupo.getChatID());
+            }
+        }
+
+
+        XML.writeXML(cm, "Chats.XML");
+        XML.writeXML(UsuariosManager.getInstance(), "Usuarios.XML");
+
+
+        Stage stage = (Stage) ((javafx.scene.Node) actionEvent.getSource()).getScene().getWindow();
+        stage.close();
 
         return grupo;
     }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ListaConversaciones>
+    <Chat xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="chatGrupal">
+        <chatID>0</chatID>
+        <ListaDeMensajes/>
+        <nombreGrupo>Finanzas</nombreGrupo>
+        <MiembrosDelGrupo>
+            <Email>empleado@gmail.com</Email>
+            <Email>empleado2@gmail.com</Email>
+        </MiembrosDelGrupo>
+        <emailEmpresa>admin@gmail.com</emailEmpresa>
+    </Chat>
+    <Chat xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="chatGrupal">
+        <chatID>1</chatID>
+        <ListaDeMensajes/>
+        <nombreGrupo>Comercio</nombreGrupo>
+        <MiembrosDelGrupo>
+            <Email>empleado@gmail.com</Email>
+        </MiembrosDelGrupo>
+        <emailEmpresa>admin@gmail.com</emailEmpresa>
+    </Chat>
+    <Chat xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="chatGrupal">
+        <chatID>2</chatID>
+        <ListaDeMensajes/>
+        <nombreGrupo>prueba</nombreGrupo>
+        <MiembrosDelGrupo>
+            <Email>empleado2@gmail.com</Email>
+        </MiembrosDelGrupo>
+        <emailEmpresa>admin@gmail.com</emailEmpresa>
+    </Chat>
+    <NextChatID>3</NextChatID>
+</ListaConversaciones>

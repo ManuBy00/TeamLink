@@ -1,32 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <ListaUsuarios>
+    <Usuario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="empleado">
+        <email>empleado@gmail.com</email>
+        <nombre>empleado</nombre>
+        <password>$2a$10$sL5AiBshNtbbBP/D7UdGrey7z06OHID3KGFNblYfDpngISyMeFOpO</password>
+        <ListaDeChatIDs>
+            <ChatID>0</ChatID>
+            <ChatID>1</ChatID>
+        </ListaDeChatIDs>
+        <empresa>admin@gmail.com</empresa>
+        <departamento>0900</departamento>
+        <manager>false</manager>
+        <puesto>000</puesto>
+    </Usuario>
     <Usuario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="empresa">
         <email>admin@gmail.com</email>
         <nombre>admin</nombre>
-        <password>$2a$10$CWfRrqGh836W/4c.1yCTr.jSoPSjVHm9sN4CanOt6PvNU75md/z.i</password>
+        <password>$2a$10$DGMtXZAx6fepXT1nrK0Z6.x2M7k56zK6plD4L5vkmSUcIhxRAF/j.</password>
+        <ListaDeChatIDs>
+            <ChatID>0</ChatID>
+            <ChatID>1</ChatID>
+            <ChatID>2</ChatID>
+        </ListaDeChatIDs>
         <direccion>000</direccion>
         <telefono>000</telefono>
         <descripcion>000</descripcion>
-        <sector>Educación</sector>
-        <empleados>pepe@gmail.com</empleados>
-        <empleados>empleado@admin.com</empleados>
+        <sector>Tecnología</sector>
+        <ListaEmpleadosEmails>
+            <EmailEmpleado>empleado</EmailEmpleado>
+            <EmailEmpleado>empleado2@gmail.com</EmailEmpleado>
+        </ListaEmpleadosEmails>
     </Usuario>
     <Usuario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="empleado">
-        <email>pepe@gmail.com</email>
-        <nombre>pepe</nombre>
-        <password>$2a$10$V4NbwaV3AGyvMzWFaxODveb7yy1oJVahwn0cuXIPJXDN9CrL.E6dS</password>
+        <email>empleado2@gmail.com</email>
+        <nombre>empleado2</nombre>
+        <password>$2a$10$nPHyTRNjDiV0THUQzDC2y.mqfrrpgbo3cFwY9EwJhrmE/0Dh.3Fvy</password>
+        <ListaDeChatIDs>
+            <ChatID>0</ChatID>
+            <ChatID>2</ChatID>
+        </ListaDeChatIDs>
         <empresa>admin@gmail.com</empresa>
         <departamento>000</departamento>
         <manager>false</manager>
-        <puesto>00</puesto>
-    </Usuario>
-    <Usuario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="empleado">
-        <email>empleado@admin.com</email>
-        <nombre>empleado</nombre>
-        <password>$2a$10$7N4T4AmvFDPNnwGDST0bBu847BD4yDbv8WDyKmKe4XoqBHumnkDRe</password>
-        <empresa>admin@gmail.com</empresa>
-        <departamento>Finanzas</departamento>
-        <manager>false</manager>
-        <puesto>Contable</puesto>
+        <puesto>000</puesto>
     </Usuario>
 </ListaUsuarios>
