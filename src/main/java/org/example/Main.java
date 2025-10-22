@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import org.example.CRUD.UsuariosManager;
 import org.example.DataAccess.XML;
 import org.example.Model.Usuario;
+import org.example.Utilities.Utilidades;
 
 import java.net.URL;
 
@@ -19,14 +20,20 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
 
-        UsuariosManager um = UsuariosManager.getInstance();
+        try {
+            UsuariosManager um = UsuariosManager.getInstance();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/teamlink/LoginView.fxml"));
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/teamlink/LoginView.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        }catch (Exception e){
+            System.err.println("ERROR AL CARGAR MAINVIEW:");
+            e.printStackTrace();
+            Utilidades.mostrarAlerta("Error Crítico", "No se pudo cargar la ventana principal. Consulte la consola.");
+        }
 
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.show();
 
 
     }

@@ -84,7 +84,8 @@ public class EmpleadoFormController {
             Utilidades.mostrarAlerta("Éxito", "Empleado " + nombre + " registrado con éxito en " + empresa + ".");
 
             // 5. Cerrar el formulario
-            ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
+            Stage stage = (Stage) emailField.getScene().getWindow();
+            stage.close();
 
         } catch (ElementoRepetido e) {
             Utilidades.mostrarAlerta("Error de Registro", e.getMessage());

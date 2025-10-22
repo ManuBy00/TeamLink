@@ -59,10 +59,10 @@ public class LoginController {
                     Stage st = new Stage();
                     st.setScene(scene);
                     st.show();
-                    Stage stage = (Stage) ((javafx.scene.Node) actionEvent.getSource()).getScene().getWindow();
+                    Stage stage = (Stage) emailField.getScene().getWindow();
                     stage.close();
                 }catch (IOException e){
-                    e.getMessage();
+                    e.printStackTrace();
                 }
 
                 Utilidades.mostrarAlerta("OK", "LOGIN CORRECTO");

@@ -5,12 +5,8 @@
         <nombre>empleado</nombre>
         <password>$2a$10$sL5AiBshNtbbBP/D7UdGrey7z06OHID3KGFNblYfDpngISyMeFOpO</password>
         <ListaDeChatIDs>
-            <ChatID>0</ChatID>
             <ChatID>1</ChatID>
-            <ChatID>3</ChatID>
-            <ChatID>4</ChatID>
-            <ChatID>5</ChatID>
-            <ChatID>7</ChatID>
+            <ChatID>2</ChatID>
         </ListaDeChatIDs>
         <empresa>admin@gmail.com</empresa>
         <departamento>0900</departamento>
@@ -22,13 +18,8 @@
         <nombre>admin</nombre>
         <password>$2a$10$DGMtXZAx6fepXT1nrK0Z6.x2M7k56zK6plD4L5vkmSUcIhxRAF/j.</password>
         <ListaDeChatIDs>
-            <ChatID>0</ChatID>
             <ChatID>1</ChatID>
             <ChatID>2</ChatID>
-            <ChatID>3</ChatID>
-            <ChatID>4</ChatID>
-            <ChatID>5</ChatID>
-            <ChatID>6</ChatID>
         </ListaDeChatIDs>
         <direccion>000</direccion>
         <telefono>000</telefono>
@@ -44,9 +35,7 @@
         <nombre>empleado2</nombre>
         <password>$2a$10$nPHyTRNjDiV0THUQzDC2y.mqfrrpgbo3cFwY9EwJhrmE/0Dh.3Fvy</password>
         <ListaDeChatIDs>
-            <ChatID>0</ChatID>
             <ChatID>2</ChatID>
-            <ChatID>6</ChatID>
         </ListaDeChatIDs>
         <empresa>admin@gmail.com</empresa>
         <departamento>000</departamento>

@@ -48,25 +48,43 @@
         </VBox>
 
         <VBox fx:id="panelChat" prefHeight="700.0" prefWidth="720.0" style="-fx-background-color: #34495E;" HBox.hgrow="ALWAYS"> <children>
-            <Label fx:id="chatNameLabel" prefHeight="60.0" prefWidth="266.0" text="[Nombre del Chat]" textFill="#2C3E50">
-                <font>
-                    <Font name="System Bold" size="24.0" />
-                </font>
-                <padding>
-                    <Insets bottom="10.0" left="15.0" right="10.0" top="15.0" />
-                </padding>
-                <style>-fx-background-color: #BDC3C7;</style>
-               <VBox.margin>
-                  <Insets left="5.0" />
-               </VBox.margin> </Label>
+            <HBox prefHeight="69.0" prefWidth="720.0">
+               <children>
+                  <Label fx:id="chatNameLabel" prefHeight="60.0" prefWidth="367.0" text="[Nombre del Chat]" textFill="#2C3E50">
+                      <font>
+                          <Font name="System Bold" size="24.0" />
+                      </font>
+                      <padding>
+                          <Insets bottom="10.0" left="15.0" right="10.0" top="15.0" />
+                      </padding>
+                      <style>-fx-background-color: #BDC3C7;</style> </Label>
+                  <Button fx:id="exportarButton" mnemonicParsing="false" onAction="#exportarChat" prefHeight="25.0" prefWidth="184.0" text="Exportar">
+                     <HBox.margin>
+                        <Insets left="280.0" right="20.0" top="20.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="resumenButton" mnemonicParsing="false" onAction="#generarResumen" prefHeight="25.0" prefWidth="179.0" text="Resumen">
+                     <HBox.margin>
+                        <Insets right="20.0" top="20.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
             <ListView fx:id="mensajesListView" style="-fx-background-color: #ECF0F1; -fx-control-inner-background: #ECF0F1; -fx-border-color: transparent;" VBox.vgrow="ALWAYS">
                 <VBox.margin>
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </VBox.margin>
             </ListView>
             <HBox alignment="CENTER_LEFT" prefHeight="59.0" prefWidth="687.0" spacing="10.0" style="-fx-background-color: #BDC3C7;"> <children>
-                <TextArea fx:id="mensajeTextArea" prefHeight="39.0" prefWidth="627.0" promptText="Escribe un mensaje..." style="-fx-control-inner-background: white; -fx-border-color: #95A5A6; -fx-background-radius: 5; -fx-border-radius: 5;" HBox.hgrow="ALWAYS" />
-                <Button fx:id="sendMensajeButton" mnemonicParsing="false" onAction="#sendMensaje" style="-fx-background-color: #3498DB; -fx-text-fill: white; -fx-font-weight: bold;" text="Enviar" />
+                  <Button fx:id="adjuntarButton" mnemonicParsing="false" onAction="#adjuntar" prefHeight="25.0" prefWidth="69.0" text="📎" />
+                <TextArea fx:id="mensajeTextArea" prefHeight="39.0" prefWidth="592.0" promptText="Escribe un mensaje..." style="-fx-control-inner-background: white; -fx-border-color: #95A5A6; -fx-background-radius: 5; -fx-border-radius: 5;" HBox.hgrow="ALWAYS">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <HBox.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </HBox.margin></TextArea>
+                <Button fx:id="sendMensajeButton" mnemonicParsing="false" onAction="#sendMensaje" prefHeight="25.0" prefWidth="114.0" style="-fx-background-color: #3498DB; -fx-text-fill: white; -fx-font-weight: bold;" text="Enviar" />
             </children>
                 <padding>
                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

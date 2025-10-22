@@ -9,7 +9,12 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.example.CRUD.ChatsManager;
 import org.example.CRUD.UsuariosManager;
@@ -18,7 +23,10 @@ import org.example.Model.*;
 import org.example.Utilities.Sesion;
 import org.example.Utilities.Utilidades;
 
-import java.io.IOException;
+import java.awt.*;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -31,6 +39,8 @@ public class MainController {
     @FXML
     public Label chatNameLabel;
     @FXML
+    public Button adjuntarButton;
+    @FXML
     private javafx.scene.control.Label nombreEmpersaLabel;
     @FXML
     private ListView<Mensaje> mensajesListView;
@@ -41,6 +51,9 @@ public class MainController {
     @FXML
     private Button newEmpleadoButton;
 
+    private Adjunto adjuntoTemporal;
+
+    private static final String MEDIA_DIR = "MEDIA_DIR/";
 
     Usuario usuarioIniciado = Sesion.getInstance().getUsuarioIniciado();
 
@@ -203,56 +216,88 @@ public class MainController {
                             // 2. Crear el contenedor HBox
                             HBox container = new HBox();
                             container.setSpacing(5);
+                            container.setAlignment(isMine ? Pos.CENTER_RIGHT : Pos.CENTER_LEFT);
 
-                            // 3. Crear la etiqueta del mensaje
+                            // Contenedor interno para texto y adjunto
+                            VBox contentBox = new VBox(2);
+                            contentBox.setAlignment(isMine ? Pos.CENTER_RIGHT : Pos.CENTER_LEFT);
+
+                            // 3. Crear el Label del Mensaje
                             Label contentLabel = new Label(mensaje.getContenido());
-                            contentLabel.setWrapText(true); // Permite saltos de línea
+                            contentLabel.setWrapText(true);
 
-                            // Opcional: Mostrar la hora del mensaje
+                            // 4. Aplicar estilos y añadir la LÓGICA DE ADJUNTO
+                            String bubbleStyle = isMine ? "-fx-background-color: #3498DB; -fx-text-fill: white; -fx-padding: 8px; -fx-background-radius: 10px;"
+                                    : "-fx-background-color: #BDC3C7; -fx-text-fill: black; -fx-padding: 8px; -fx-background-radius: 10px;";
+
+                            // 4.1. Si hay texto, lo añadimos al contentBox
+                            if (!mensaje.getContenido().trim().isEmpty()) {
+                                contentLabel.setStyle(bubbleStyle); // Aplicamos el estilo de burbuja
+                                contentBox.getChildren().add(contentLabel);
+                            }
+
+                            // 4.2. Lógica del Adjunto
+                            if (mensaje.getAdjunto() != null) {
+                                Adjunto adjunto = mensaje.getAdjunto();
+                                Hyperlink linkAdjunto = new Hyperlink("📎 " + adjunto.getNombreOriginal());
+                                linkAdjunto.setMaxWidth(300);
+                                linkAdjunto.setWrapText(true);
+
+                                // Asignar el método para abrir el archivo
+                                linkAdjunto.setOnAction(e -> abrirAdjunto(adjunto));
+
+                                // Si solo hay adjunto y no texto, le damos un estilo de burbuja
+                                if (mensaje.getContenido().trim().isEmpty()) {
+                                    linkAdjunto.setStyle(bubbleStyle);
+                                }
+
+                                contentBox.getChildren().add(linkAdjunto);
+                            }
+
+                            // 5. Mostrar la hora
                             String hora = mensaje.getFechaHora().toLocalTime().toString().substring(0, 5);
                             Label timeLabel = new Label(hora);
                             timeLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: gray;");
 
-                            // 4. Aplicar estilos y alineación
+                            // 6. Añadir los elementos al contenedor principal (HBox)
                             if (isMine) {
-                                // Estilo para mensajes propios (azul/derecha)
-                                contentLabel.setStyle("-fx-background-color: #3498DB; -fx-text-fill: white; -fx-padding: 8px; -fx-background-radius: 10px;");
-
-                                // Alinea el contenido a la DERECHA
-                                container.setAlignment(Pos.CENTER_RIGHT);
-                                // Añadimos un separador vacío para empujar la burbuja
-                                container.getChildren().addAll(timeLabel, contentLabel);
+                                // Alineación de derecha a izquierda: [Hora] [Burbuja]
+                                container.getChildren().addAll(timeLabel, contentBox);
                             } else {
-                                // Estilo para mensajes de otros (gris/izquierda)
-                                contentLabel.setStyle("-fx-background-color: #BDC3C7; -fx-text-fill: black; -fx-padding: 8px; -fx-background-radius: 10px;");
-
-                                // Alinea el contenido a la IZQUIERDA
-                                container.setAlignment(Pos.CENTER_LEFT);
-                                // Opcional: Añadir el nombre del remitente si es un chat grupal
-                                Label remitenteLabel = new Label(mensaje.getRemitenteEmail()); // Idealmente busca el nombre aquí
+                                // Opcional: Mostrar el remitente (mejor si buscas el nombre en vez del email)
+                                Label remitenteLabel = new Label(mensaje.getRemitenteEmail());
                                 remitenteLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 10px;");
 
-                                container.getChildren().addAll(remitenteLabel, contentLabel, timeLabel);
+                                // Alineación de izquierda a derecha: [Nombre] [Burbuja] [Hora]
+                                container.getChildren().addAll(remitenteLabel, contentBox, timeLabel);
                             }
 
-                            // 5. Establecer el HBox como el gráfico de la celda
+                            // 7. Establecer el HBox como el gráfico de la celda
                             setGraphic(container);
-                            setText(null); // No queremos texto simple, solo el gráfico (HBox)
+                            setText(null);
                         }
                     }
                 };
             }
+
         });
     }
 
     public void sendMensaje(ActionEvent actionEvent) {
         Chat chatSeleccionado = chatsListView.getSelectionModel().getSelectedItem();
         String contenido = mensajeTextArea.getText();
-        if (contenido.isEmpty()){
+        Adjunto adjunto = adjuntoTemporal;
+        Mensaje msg;
+
+        if (contenido.isEmpty() && adjuntoTemporal == null){
             Utilidades.mostrarAlerta("Mensaje", "Escribe algo para enviar un mensaje");
             return;
         }
-        Mensaje msg = new Mensaje(contenido, usuarioIniciado.getEmail());
+        if (adjunto==null){
+            msg = new Mensaje(contenido, usuarioIniciado.getEmail());
+        }else{
+            msg = new Mensaje(contenido,usuarioIniciado.getEmail(), adjunto);
+        }
 
         if (chatSeleccionado == null) {
             Utilidades.mostrarAlerta("Error", "Debes seleccionar un chat para enviar un mensaje.");
@@ -269,5 +314,139 @@ public class MainController {
 
         // C. Desplazarse al último mensaje para que sea visible
         mensajesListView.scrollTo(mensajesListView.getItems().size() - 1);
+
+        adjuntoTemporal = null;
+    }
+
+    public void adjuntar(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Seleccionar Archivo Adjunto");
+
+        Stage st = (Stage) sendMensajeButton.getScene().getWindow();
+        File archivoSeleccionado = fileChooser.showOpenDialog(st);
+
+        if (archivoSeleccionado != null) {
+            // 3. Crear el directorio de media/ si no existe
+            File mediaDirectory = new File("MEDIA_DIR");
+            if (!mediaDirectory.exists()) {
+                mediaDirectory.mkdirs();
+            }
+
+        }
+
+
+        String nombreUnico = "_" + archivoSeleccionado.getName();
+        File archivoDestino = new File(MEDIA_DIR + nombreUnico);
+
+        // Declaramos los streams fuera del try para que el bloque 'finally' pueda acceder a ellos.
+        InputStream is = null;
+        OutputStream os = null;
+
+        try {
+            // Inicialización de los Streams (Dentro del try)
+            is = new BufferedInputStream(new FileInputStream(archivoSeleccionado));
+            os = new BufferedOutputStream(new FileOutputStream(archivoDestino));
+
+            //Copia Manual
+            byte[] buffer = new byte[1024]; // Búfer de 1 KB
+            int bytesRead;
+
+            // Leer del InputStream y escribir al OutputStream hasta que no queden más bytes
+            while ((bytesRead = is.read(buffer)) != -1) {
+                os.write(buffer, 0, bytesRead);
+            }
+
+            // 3. Validación de Tamaño (Debe ocurrir después de la copia exitosa)
+            long maxSize = 10 * 1024 * 1024; // 10 Megabytes
+
+            if (Files.size(archivoDestino.toPath()) > maxSize) {
+                Files.delete(archivoDestino.toPath()); // Borrar el archivo si es muy grande
+                Utilidades.mostrarAlerta("Error", "El archivo excede el tamaño máximo permitido (10 MB).");
+            }
+
+            // 5. Creación del Objeto Adjunto
+            String tipo = Files.probeContentType(archivoDestino.toPath()); //determina el tipo de archivo
+            if (tipo == null){
+                tipo = "application/octet-stream"; //si es un tipo desconocido, le asigna un valor genérico
+            }
+
+            Adjunto adjunto = new Adjunto(nombreUnico, archivoDestino.getPath(), Files.size(archivoDestino.toPath()), tipo);
+            adjuntoTemporal = adjunto;
+            // 6. Feedback en la UI
+            Utilidades.mostrarAlerta("Archivo adjuntado", "[ADJUNTO] " + nombreUnico + " listo para enviar. Escriba texto si lo desea.");
+
+        } catch (IOException e) {
+            // Si ocurre un error de I/O durante la inicialización, la lectura o la escritura
+            Utilidades.mostrarAlerta("Error I/O", "Hubo un error al copiar el archivo.");
+            e.printStackTrace();
+
+        } finally {
+            // El bloque 'finally' se ejecuta SIEMPRE, garantizando el cierre.
+            try {
+                if (is != null) is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (os != null) os.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    private void abrirAdjunto(Adjunto adjunto) {
+        File archivo = new File(adjunto.getRutaGuardada());
+
+        if (!archivo.exists()) {
+            Utilidades.mostrarAlerta("Error", "El archivo adjunto no se encuentra.");
+            return;
+        }
+
+        if (Desktop.isDesktopSupported()) {
+            try {
+                Desktop.getDesktop().open(archivo);
+            } catch (IOException e) {
+                Utilidades.mostrarAlerta("Error", "No se pudo abrir el archivo.");
+                e.printStackTrace();
+            }
+        } else {
+            Utilidades.mostrarAlerta("Error", "Apertura de archivos no soportada.");
+        }
+    }
+
+   public void exportarChat(ActionEvent actionEvent) {
+        Chat chatSeleccionado = chatsListView.getSelectionModel().getSelectedItem();
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Selecciona una ruta para el informe");
+        fileChooser.setInitialFileName("resumen_chat.txt");
+
+        Stage st = (Stage) sendMensajeButton.getScene().getWindow();
+        File archivoDestino = fileChooser.showSaveDialog(st);
+
+
+        if (archivoDestino!=null){
+            ArrayList<Mensaje> listaMensajes = chatSeleccionado.getMensajes();
+
+            try {
+                FileWriter fileWriter = new FileWriter(archivoDestino);
+                fileWriter.write("--- INFORME DE CONVERSACIÓN (ID: " + chatSeleccionado.getChatID() +") ---\n\n");
+                for (Mensaje msg : listaMensajes){
+                    String mensaje = "[" + msg.getFechaHora() + "]" + " " + msg.getRemitenteEmail() + ": " + msg.getContenido()+ "\n";
+                    fileWriter.write(mensaje);
+                }
+                fileWriter.close();
+                Utilidades.mostrarAlerta("Éxito", "Conversación exportada correctamente a: " + archivoDestino.getAbsolutePath());
+            } catch (IOException e ) {
+                Utilidades.mostrarAlerta("Error de Exportación", "No se pudo escribir el archivo. Verifique la ruta/permisos.");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void generarResumen(ActionEvent actionEvent) {
+
     }
 }

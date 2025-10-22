@@ -47,7 +47,6 @@ public class ChatFormController {
         }
 
 
-        //no se como va esto jaja
         miembrosGrupalListView.setCellFactory(new Callback<ListView<Usuario>, ListCell<Usuario>>() {
             @Override
             public ListCell<Usuario> call(ListView<Usuario> param) {
@@ -58,16 +57,12 @@ public class ChatFormController {
                         if (empty || usuario == null) {
                             setText(null);
                         } else {
-                            // Muestra el nombre del usuario
                             setText(usuario.getNombre());
-                            // Podrías poner también: setText(usuario.getNombre() + " (" + usuario.getEmail() + ")");
                         }
                     }
                 };
             }
         });
-
-
     }
 
     public ChatGrupal crearGrupo(ActionEvent actionEvent) {
@@ -99,7 +94,7 @@ public class ChatFormController {
         XML.writeXML(cm, "Chats.XML");
         XML.writeXML(UsuariosManager.getInstance(), "Usuarios.XML");
 
-        Stage stage = (Stage) ((javafx.scene.Node) actionEvent.getSource()).getScene().getWindow();
+        Stage stage = (Stage) nombreGrupoTextField.getScene().getWindow();
         stage.close();
 
         return grupo;
