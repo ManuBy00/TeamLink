@@ -2,13 +2,60 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
 <HBox prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.Controller.MainController">
     <children>
-        <VBox prefWidth="280.0" style="-fx-background-color: #2C3E50;"> <children>
-            <Label fx:id="nombreEmpersaLabel" text="[Nombre de la Empresa]" textFill="WHITE">
+        <VBox alignment="TOP_CENTER" prefHeight="700.0" prefWidth="125.0" spacing="10.0" style="-fx-background-color: #2C3E50;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+
+            <padding>
+                <Insets top="20.0" />
+            </padding>
+            <ImageView fx:id="logo" fitHeight="42.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@../../../Images/LogoSF.png" />
+                </image>
+            <VBox.margin>
+               <Insets />
+            </VBox.margin>
+            </ImageView>
+
+            <VBox alignment="CENTER" prefHeight="40.0" prefWidth="39.0" style="-fx-background-color; -fx-background-radius: 5; -fx-border-width: 0 0 0 4; -fx-border-radius: 5;">
+                <padding><Insets bottom="8" left="15" right="8" top="8" /></padding>
+                <ImageView fx:id="iconPrivados" fitHeight="44.0" fitWidth="35.0" onMouseClicked="#filtrarPrivados" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../../Images/priv.png" />
+                    </image>
+                </ImageView>
+                <VBox.margin><Insets left="10.0" right="10.0" /></VBox.margin>
+            </VBox>
+            <Label prefHeight="0.0" prefWidth="325.0" text="Privados" textFill="#bdc3c7">
+                <VBox.margin>
+                    <Insets left="20.0" top="-20.0" />
+                </VBox.margin>
+            </Label>
+
+            <VBox fx:id="d" alignment="CENTER" prefHeight="40.0" prefWidth="39.0" style="-fx-background-color; -fx-background-radius: 5; -fx-border-width: 0 0 0 4; -fx-border-radius: 5;">
+                <padding><Insets bottom="8" left="15" right="8" top="8" /></padding>
+                <ImageView fx:id="iconGrupos" fitHeight="44.0" fitWidth="35.0" onMouseClicked="#filtrarGrupos" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../../Images/grupos.png" />
+                    </image>
+                </ImageView>
+                <VBox.margin><Insets left="10.0" right="10.0" /></VBox.margin>
+            </VBox>
+
+            <Label prefHeight="0.0" prefWidth="325.0" text="Grupos" textFill="#bdc3c7">
+            <VBox.margin>
+               <Insets left="20.0" top="-20.0" />
+            </VBox.margin>
+            </Label>
+
+        </VBox>
+        <VBox prefHeight="700.0" prefWidth="351.0" style="-fx-background-color: #2C3E50;"> <children>
+            <Label fx:id="nombreEmpersaLabel" prefHeight="49.0" prefWidth="280.0" text="[Nombre de la Empresa]" textFill="WHITE">
                 <font>
                     <Font name="System Bold" size="24.0" />
                 </font>
@@ -30,7 +77,7 @@
                     <Font name="System Bold" size="14.0" />
                 </font>
             </Label>
-            <ListView fx:id="chatsListView" style="-fx-background-color: #34495E; -fx-control-inner-background: #34495E; -fx-text-fill: white; -fx-border-color: #2C3E50;" VBox.vgrow="ALWAYS">
+            <ListView fx:id="chatsListView" prefHeight="576.0" prefWidth="260.0" style="-fx-background-color: #34495E; -fx-control-inner-background: #34495E; -fx-text-fill: white; -fx-border-color: #2C3E50;" VBox.vgrow="ALWAYS">
                 <VBox.margin>
                     <Insets left="10.0" right="10.0" />
                 </VBox.margin>
@@ -58,26 +105,26 @@
                           <Insets bottom="10.0" left="15.0" right="10.0" top="15.0" />
                       </padding>
                       <style>-fx-background-color: #BDC3C7;</style> </Label>
-                  <Button fx:id="exportarButton" mnemonicParsing="false" onAction="#exportarChat" prefHeight="25.0" prefWidth="184.0" text="Exportar">
+                  <Button fx:id="exportarButton" mnemonicParsing="false" onAction="#exportarChat" prefHeight="26.0" prefWidth="158.0" text="Exportar">
                      <HBox.margin>
-                        <Insets left="280.0" right="20.0" top="20.0" />
+                        <Insets left="200.0" right="20.0" top="20.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="resumenButton" mnemonicParsing="false" onAction="#generarResumen" prefHeight="25.0" prefWidth="179.0" text="Resumen">
+                  <Button fx:id="resumenButton" mnemonicParsing="false" onAction="#generarResumen" prefHeight="26.0" prefWidth="152.0" text="Resumen">
                      <HBox.margin>
                         <Insets right="20.0" top="20.0" />
                      </HBox.margin>
                   </Button>
                </children>
             </HBox>
-            <ListView fx:id="mensajesListView" style="-fx-background-color: #ECF0F1; -fx-control-inner-background: #ECF0F1; -fx-border-color: transparent;" VBox.vgrow="ALWAYS">
+            <ListView fx:id="mensajesListView" style="-fx-background-color: #ECF0F1; -fx-control-inner-background: #ECF0F1; -fx-border-color: transparent; -fx-border-radius: ;" VBox.vgrow="ALWAYS">
                 <VBox.margin>
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </VBox.margin>
             </ListView>
             <HBox alignment="CENTER_LEFT" prefHeight="59.0" prefWidth="687.0" spacing="10.0" style="-fx-background-color: #BDC3C7;"> <children>
                   <Button fx:id="adjuntarButton" mnemonicParsing="false" onAction="#adjuntar" prefHeight="25.0" prefWidth="69.0" text="📎" />
-                <TextArea fx:id="mensajeTextArea" prefHeight="39.0" prefWidth="592.0" promptText="Escribe un mensaje..." style="-fx-control-inner-background: white; -fx-border-color: #95A5A6; -fx-background-radius: 5; -fx-border-radius: 5;" HBox.hgrow="ALWAYS">
+                <TextArea fx:id="mensajeTextArea" prefHeight="39.0" prefWidth="489.0" promptText="Escribe un mensaje..." style="-fx-control-inner-background: white; -fx-border-color: #95A5A6; -fx-background-radius: 5; -fx-border-radius: 5;" HBox.hgrow="ALWAYS">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>

@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -448,5 +449,11 @@ public class MainController {
 
     public void generarResumen(ActionEvent actionEvent) {
 
+    }
+
+    public void filtrarGrupos(MouseEvent mouseEvent) {
+    }
+
+    public void filtrarPrivados(MouseEvent mouseEvent) {
     }
 }
