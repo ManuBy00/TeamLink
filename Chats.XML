@@ -5,7 +5,7 @@
         <ListaDeMensajes>
             <Mensaje>
                 <Contenido>Buenas tardes
-</Contenido>
+                </Contenido>
                 <RemitenteEmail>admin@gmail.com</RemitenteEmail>
                 <FechaHora>2025-10-22T19:41:23.1422451</FechaHora>
             </Mensaje>
@@ -13,6 +13,17 @@
                 <Contenido>Todo bien hoy?</Contenido>
                 <RemitenteEmail>admin@gmail.com</RemitenteEmail>
                 <FechaHora>2025-10-22T19:41:31.7578356</FechaHora>
+            </Mensaje>
+            <Mensaje>
+                <Contenido>te envío el logo</Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <Adjunto>
+                    <NombreOriginal>_Screenshot 2025-10-23 125240.png</NombreOriginal>
+                    <RutaGuardada>MEDIA_DIR\_Screenshot 2025-10-23 125240.png</RutaGuardada>
+                    <TamanoBytes>24576</TamanoBytes>
+                    <TipoMime>image/png</TipoMime>
+                </Adjunto>
+                <FechaHora>2025-10-23T17:23:58.0363842</FechaHora>
             </Mensaje>
         </ListaDeMensajes>
         <Usuario1Email>admin@gmail.com</Usuario1Email>
@@ -44,5 +55,27 @@
         </MiembrosDelGrupo>
         <emailEmpresa>admin@gmail.com</emailEmpresa>
     </Chat>
-    <NextChatID>3</NextChatID>
+    <Chat xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="chatGrupal">
+        <chatID>3</chatID>
+        <ListaDeMensajes>
+            <Mensaje>
+                <Contenido>fgds
+</Contenido>
+                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-23T17:25:51.2916634</FechaHora>
+            </Mensaje>
+        </ListaDeMensajes>
+        <nombreGrupo></nombreGrupo>
+        <MiembrosDelGrupo>
+            <Email>empleado@gmail.com</Email>
+        </MiembrosDelGrupo>
+        <emailEmpresa>admin@gmail.com</emailEmpresa>
+    </Chat>
+    <Chat xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="chatPrivado">
+        <chatID>4</chatID>
+        <ListaDeMensajes/>
+        <Usuario1Email>admin@gmail.com</Usuario1Email>
+        <Usuario2Email>empleado2@gmail.com</Usuario2Email>
+    </Chat>
+    <NextChatID>5</NextChatID>
 </ListaConversaciones>

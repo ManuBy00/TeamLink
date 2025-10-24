@@ -5,7 +5,8 @@ module org.example.teamlink {
     requires jbcrypt;
     requires java.xml.bind;
     requires java.base;
-    requires java.desktop; // Buena práctica para asegurar acceso a módulos básicos de Java
+    requires java.desktop;
+
 
     // JavaFX necesita acceso a controladores y vistas
     opens org.example.teamlink to javafx.fxml;

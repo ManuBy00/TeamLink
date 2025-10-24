@@ -7,6 +7,7 @@
         <ListaDeChatIDs>
             <ChatID>1</ChatID>
             <ChatID>2</ChatID>
+            <ChatID>3</ChatID>
         </ListaDeChatIDs>
         <empresa>admin@gmail.com</empresa>
         <departamento>0900</departamento>
@@ -20,6 +21,8 @@
         <ListaDeChatIDs>
             <ChatID>1</ChatID>
             <ChatID>2</ChatID>
+            <ChatID>3</ChatID>
+            <ChatID>4</ChatID>
         </ListaDeChatIDs>
         <direccion>000</direccion>
         <telefono>000</telefono>
@@ -36,6 +39,7 @@
         <password>$2a$10$nPHyTRNjDiV0THUQzDC2y.mqfrrpgbo3cFwY9EwJhrmE/0Dh.3Fvy</password>
         <ListaDeChatIDs>
             <ChatID>2</ChatID>
+            <ChatID>4</ChatID>
         </ListaDeChatIDs>
         <empresa>admin@gmail.com</empresa>
         <departamento>000</departamento>

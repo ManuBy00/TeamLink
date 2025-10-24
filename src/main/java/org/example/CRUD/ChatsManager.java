@@ -1,14 +1,17 @@
 package org.example.CRUD;
 
+import org.example.Controller.MainController;
 import org.example.DataAccess.XML;
 import org.example.Exceptions.ElementoNoEncontrado;
 import org.example.Exceptions.ElementoRepetido;
 import org.example.Model.Chat;
+import org.example.Model.ChatGrupal;
 import org.example.Model.ChatPrivado;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @XmlRootElement(name = "ListaConversaciones")
@@ -139,5 +142,30 @@ public class ChatsManager implements CRUD<Chat> {
 
     @Override
     public void mostrar(Chat elemento) { /* ... */ }
+
+    /**
+     * Filtra una lista de chats basándose en el tipo de filtro especificado.
+     * Este método es estático para que pueda ser llamado sin necesidad de la instancia Singleton,
+     * aunque puedes mantenerlo de instancia si lo prefieres.
+     * * @param chatsCompletos La lista de todos los objetos Chat.
+     * @param filtro El estado de filtro deseado (ALL, PRIVADOS, GRUPALES).
+     * @return Una lista de chats que cumplen con el criterio de filtro.
+     */
+    public static List<Chat> filtrarChats(List<Chat> chatsCompletos, MainController.ChatFilter filtro) {
+        if (chatsCompletos == null) {
+            return List.of(); // Devuelve una lista vacía si la entrada es nula
+        }
+
+        return chatsCompletos.stream()
+                .filter(chat -> {
+                    if (filtro == MainController.ChatFilter.PRIVADOS) {
+                        return chat instanceof ChatPrivado;
+                    } else if (filtro == MainController.ChatFilter.GRUPALES) {
+                        return chat instanceof ChatGrupal;
+                    }
+                    return true; // ChatFilter.ALL
+                })
+                .collect(Collectors.toList());
+    }
 
 }

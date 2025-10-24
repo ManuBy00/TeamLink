@@ -9,6 +9,7 @@ import javafx.util.Callback;
 import org.example.CRUD.ChatsManager;
 import org.example.CRUD.UsuariosManager;
 import org.example.DataAccess.XML;
+import org.example.Exceptions.DatoNoValido;
 import org.example.Exceptions.ElementoRepetido;
 import org.example.Model.*;
 import org.example.Utilities.Sesion;
@@ -70,6 +71,11 @@ public class ChatFormController {
 
         List<Usuario> usuariosGrupo = miembrosGrupalListView.getSelectionModel().getSelectedItems();
         String nombre = nombreGrupoTextField.getText();
+
+        if (nombre.isEmpty()){
+            Utilidades.mostrarAlerta("Campo vacío", "El campo nombre no puede estar vacío");
+            return null;
+        }
 
         List<String> correosUsuarios = usuariosGrupo.stream().map(Usuario::getEmail).toList();
 

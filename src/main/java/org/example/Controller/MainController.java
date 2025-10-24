@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -26,11 +27,16 @@ import org.example.Utilities.Utilidades;
 
 import java.awt.*;
 import java.io.*;
+import java.lang.reflect.Array;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class MainController {
     @FXML
@@ -42,13 +48,13 @@ public class MainController {
     @FXML
     public Button adjuntarButton;
     @FXML
+    public TextField filtroNombreChatField;
+    @FXML
     private javafx.scene.control.Label nombreEmpersaLabel;
     @FXML
     private ListView<Mensaje> mensajesListView;
-
     @FXML
     private ListView<Chat> chatsListView;
-
     @FXML
     private Button newEmpleadoButton;
 
@@ -57,6 +63,15 @@ public class MainController {
     private static final String MEDIA_DIR = "MEDIA_DIR/";
 
     Usuario usuarioIniciado = Sesion.getInstance().getUsuarioIniciado();
+
+
+    public enum ChatFilter {
+        ALL, PRIVADOS, GRUPALES
+    }
+
+    private ChatFilter currentFilter = ChatFilter.ALL;
+
+
 
     @FXML
     public void initialize(){
@@ -69,8 +84,7 @@ public class MainController {
             nombreEmpersaLabel.setText(empresaIniciada.getNombre());
         }
 
-        cargarChats(); // Llama a tu metodo
-
+        cargarChats();
 
         chatsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             // 'oldValue' es el chat que estaba seleccionado antes.
@@ -85,6 +99,10 @@ public class MainController {
         if (usuarioIniciado instanceof Empleado){
             newEmpleadoButton.setVisible(false);
         }
+
+        filtroNombreChatField.textProperty().addListener((observable, oldValue, newValue) -> {
+            aplicarFiltroBusqueda(newValue);
+        });
     }
 
 
@@ -132,10 +150,19 @@ public class MainController {
             }
         }
 
+        List<Chat> chatsFiltrados = ChatsManager.filtrarChats(chatsCompletos, currentFilter);
+
         // Llenamos el ListView
         ObservableList<Chat> chatsObservableList;
-        chatsObservableList = FXCollections.observableArrayList(chatsCompletos);
+        if (currentFilter == ChatFilter.ALL){
+            chatsObservableList = FXCollections.observableArrayList(chatsCompletos);
+        }else {
+            chatsObservableList = FXCollections.observableArrayList(chatsFiltrados);
+        }
+
         chatsListView.setItems(chatsObservableList);
+
+
 
         // Configuramos la apariencia de las celdas (Cell Factory)
         configurarChatCellFactory();
@@ -187,7 +214,7 @@ public class MainController {
         }
         mensajesListView.setItems(mensajes);
 
-        // Opcional: Desplazarse al último mensaje
+        //Desplazarse al último mensaje
         if (!mensajes.isEmpty()) {
             mensajesListView.scrollTo(mensajes.size() - 1);
         }
@@ -290,7 +317,7 @@ public class MainController {
         Adjunto adjunto = adjuntoTemporal;
         Mensaje msg;
 
-        if (contenido.isEmpty() && adjuntoTemporal == null){
+        if (contenido.isEmpty()){
             Utilidades.mostrarAlerta("Mensaje", "Escribe algo para enviar un mensaje");
             return;
         }
@@ -332,9 +359,7 @@ public class MainController {
             if (!mediaDirectory.exists()) {
                 mediaDirectory.mkdirs();
             }
-
         }
-
 
         String nombreUnico = "_" + archivoSeleccionado.getName();
         File archivoDestino = new File(MEDIA_DIR + nombreUnico);
@@ -419,41 +444,253 @@ public class MainController {
 
    public void exportarChat(ActionEvent actionEvent) {
         Chat chatSeleccionado = chatsListView.getSelectionModel().getSelectedItem();
+        if (chatSeleccionado == null){
+            Utilidades.mostrarAlerta("Elemento vacío", "Debes seleccionar un chat");
+        }
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Selecciona una ruta para el informe");
-        fileChooser.setInitialFileName("resumen_chat.txt");
+       fileChooser.setInitialFileName("chat_exportacion_" + chatSeleccionado.getChatID());
+
+       fileChooser.getExtensionFilters().add(
+               new FileChooser.ExtensionFilter("Archivo ZIP (*.zip)", "*.zip")
+       );
 
         Stage st = (Stage) sendMensajeButton.getScene().getWindow();
         File archivoDestino = fileChooser.showSaveDialog(st);
 
 
         if (archivoDestino!=null){
-            ArrayList<Mensaje> listaMensajes = chatSeleccionado.getMensajes();
-
             try {
-                FileWriter fileWriter = new FileWriter(archivoDestino);
-                fileWriter.write("--- INFORME DE CONVERSACIÓN (ID: " + chatSeleccionado.getChatID() +") ---\n\n");
-                for (Mensaje msg : listaMensajes){
-                    String mensaje = "[" + msg.getFechaHora() + "]" + " " + msg.getRemitenteEmail() + ": " + msg.getContenido()+ "\n";
-                    fileWriter.write(mensaje);
-                }
-                fileWriter.close();
-                Utilidades.mostrarAlerta("Éxito", "Conversación exportada correctamente a: " + archivoDestino.getAbsolutePath());
-            } catch (IOException e ) {
-                Utilidades.mostrarAlerta("Error de Exportación", "No se pudo escribir el archivo. Verifique la ruta/permisos.");
+                // 1. Generar el contenido del informe en una String
+                String contenidoInforme = generarContenidoInforme(chatSeleccionado);
+
+                // 2. Ejecutar la lógica de empaquetado (creando el ZIP y añadiendo archivos)
+                empaquetarConversacionEnZip(chatSeleccionado, contenidoInforme, archivoDestino);
+
+                Utilidades.mostrarAlerta("Éxito", "Conversación y adjuntos empaquetados correctamente en: " + archivoDestino.getAbsolutePath());
+
+            } catch (IOException e) {
+                Utilidades.mostrarAlerta("Error I/O", "Ocurrió un error al generar o empaquetar los archivos.");
                 e.printStackTrace();
             }
         }
     }
 
-    public void generarResumen(ActionEvent actionEvent) {
+    // Método auxiliar para generar el texto (reutilizado de tu código)
+    private String generarContenidoInforme(Chat chat) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("--- INFORME DE CONVERSACIÓN (ID: ").append(chat.getChatID()).append(") ---\n\n");
 
+        for (Mensaje msg : chat.getMensajes()){
+            String mensaje = String.format("[%s] %s: %s\n",
+                    msg.getFechaHora().toLocalTime().toString().substring(0, 5),
+                    msg.getRemitenteEmail(),
+                    msg.getContenido());
+            sb.append(mensaje);
+        }
+        return sb.toString();
     }
 
+    private void empaquetarConversacionEnZip(Chat chatSeleccionado, String contenidoInforme, File archivoDestino) throws IOException {
+        // 1. Inicializar ZipOutputStream (usando try-with-resources para el cierre automático)
+        try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(archivoDestino))) {
+
+            // --- A. Añadir el Informe de Conversación (Texto) ---
+
+            // Crear una entrada ZIP para el archivo de texto
+            ZipEntry informeEntry = new ZipEntry("chat_informe_" + chatSeleccionado.getChatID() + ".txt");
+            zos.putNextEntry(informeEntry);
+
+            // Escribir el contenido del informe (String) como bytes en el ZIP
+            zos.write(contenidoInforme.getBytes(StandardCharsets.UTF_8));
+
+            // Cerrar la entrada del archivo de texto
+            zos.closeEntry();
+
+            // --- B. Añadir los Archivos Adjuntos (Binarios) ---
+
+            for (Mensaje msg : chatSeleccionado.getMensajes()) {
+                if (msg.getAdjunto() != null) {
+
+                    // Obtener el archivo físico que se guardó en media/
+                    File adjuntoFile = new File(msg.getAdjunto().getRutaGuardada());
+
+                    if (adjuntoFile.exists()) {
+                        // Crear una entrada ZIP con el nombre original del archivo
+                        ZipEntry adjuntoEntry = new ZipEntry("adjuntos/" + msg.getAdjunto().getNombreOriginal());
+                        zos.putNextEntry(adjuntoEntry);
+
+                        // Copiar el contenido binario del adjunto al ZIP
+                        try (FileInputStream fis = new FileInputStream(adjuntoFile)) {
+                            byte[] buffer = new byte[1024];
+                            int bytesRead;
+                            while ((bytesRead = fis.read(buffer)) > 0) {
+                                zos.write(buffer, 0, bytesRead);
+                            }
+                        } // fis se cierra automáticamente
+
+                        zos.closeEntry();
+                    } else {
+                        // Opcional: Registrar que el archivo físico no fue encontrado
+                        System.err.println("Advertencia: Archivo adjunto no encontrado en la ruta: " + adjuntoFile.getPath());
+                    }
+                }
+            }
+        }
+    }    // zos (ZipOutputStream) se cierra automáticamente aquí, finalizando el archivo ZIP
+
+
+    public void generarResumen(ActionEvent actionEvent) {
+        Chat chatSeleccionado = chatsListView.getSelectionModel().getSelectedItem();
+
+        if (chatSeleccionado == null) {
+            Utilidades.mostrarAlerta("Error", "Selecciona un chat para generar el resumen.");
+            return;
+        }
+
+        List<Mensaje> listaMensajes = chatSeleccionado.getMensajes();
+        if (listaMensajes.isEmpty()) {
+            Utilidades.mostrarAlerta("Advertencia", "No hay mensajes en este chat para analizar.");
+            return;
+        }
+
+        try {
+            // 1. Generar el Objeto Resumen
+            ResumenChat resumen = analizarChatConStreams(listaMensajes, chatSeleccionado);
+
+            // 2. Crear la Nueva Ventana (Stage)
+            Stage resumenStage = new Stage();
+            resumenStage.setTitle("Informe Estadístico Chat ID: " + resumen.getChat().getChatID());
+
+            // 3. Crear el Área de Texto y el Contenido
+            TextArea resumenTextArea = new TextArea(resumen.toString());
+            resumenTextArea.setEditable(false);
+            resumenTextArea.setPrefSize(600, 450);
+            resumenTextArea.setStyle("-fx-font-family: 'Monospaced'; -fx-font-size: 13;"); // Para mejor formato
+
+            // 4. Configurar la escena
+            VBox root = new VBox(resumenTextArea);
+            root.setStyle("-fx-padding: 10;");
+            Scene scene = new Scene(root);
+
+            resumenStage.setScene(scene);
+
+            // 5. Mostrar la ventana
+            resumenStage.show();
+
+        } catch (Exception e) {
+            Utilidades.mostrarAlerta("Error de Análisis", "Ocurrió un error al procesar el chat.");
+            e.printStackTrace();
+        }
+    }
+
+    private ResumenChat analizarChatConStreams(List<Mensaje> listaMensajes, Chat chat) {
+        // A. Conteo Total
+        long totalMensajes = listaMensajes.stream().count();
+
+        // B. Conteo por Usuario (Map<Email, Count>)
+        Map<String, Long> mensajesPorUsuario = listaMensajes.stream()
+                .collect(Collectors.groupingBy(
+                        Mensaje::getRemitenteEmail,
+                        Collectors.counting()
+                ));
+
+        // C. Palabras Más Comunes (TOP 5)
+        Map<String, Long> frecuenciaPalabras = listaMensajes.stream()
+                .map(Mensaje::getContenido)
+                // Divide el contenido por cualquier carácter que NO sea una letra/número (mejor para limpieza)
+                .flatMap(contenido -> List.of(contenido.toLowerCase().split("[^a-zñáéíóúüA-ZÑÁÉÍÓÚÜ0-9]+")).stream())
+                .filter(palabra -> palabra.length() > 3) // Filtra palabras irrelevantes
+                .collect(Collectors.groupingBy(
+                        Function.identity(),
+                        Collectors.counting()
+                ));
+
+        //Mensajes con adjuntos
+        long mensajesConAdjunto = listaMensajes.stream()
+                .filter(mensaje -> mensaje.getAdjunto() != null)
+                .count();
+
+        // Ordenar y limitar el resultado
+        List<Map.Entry<String, Long>> topPalabras = frecuenciaPalabras.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .limit(5)
+                .collect(Collectors.toList());
+
+        // 4. Devolver el Objeto ResumenChat
+        return new ResumenChat(chat, totalMensajes, mensajesPorUsuario, topPalabras,mensajesConAdjunto);
+    }
+
+
     public void filtrarGrupos(MouseEvent mouseEvent) {
+        currentFilter = ChatFilter.GRUPALES;
+        cargarChats();
     }
 
     public void filtrarPrivados(MouseEvent mouseEvent) {
+        currentFilter = ChatFilter.PRIVADOS;
+        cargarChats();
     }
+
+    public void allChats(MouseEvent mouseEvent) {
+        currentFilter = ChatFilter.ALL;
+        cargarChats();
+    }
+
+    /**
+     * Aplica un filtro de búsqueda por nombre o email al ListView de chats.
+     * * Si la cadena de búsqueda contiene texto, se filtran todos los chats:
+     * 1. Chats Grupales: Se genera una lista solo de chat grupales, y se filtra por el campo 'nombreGrupo'.
+     * 2. Chats Privados: Se genera una lista solo de chat privados y se buscan por el email del otro participante.
+     * actualiza el chatsListView.
+     * * @param nombreABuscar La cadena de texto introducida por el usuario en el campo de búsqueda.
+     */
+    private void aplicarFiltroBusqueda(String nombreABuscar) {
+        ChatsManager cm = ChatsManager.getInstance();
+        ArrayList<Chat> chatList = (ArrayList<Chat>) cm.getChatsList();
+
+        //obtenemos lista de chat grupales
+        List<ChatGrupal> chatGrupales = chatList.stream()
+                .filter(chat -> chat instanceof ChatGrupal) //filtramos grupos
+                .map(chat -> (ChatGrupal) chat) //los casteamos
+                .collect((Collectors.toList())); //guardamos en lista
+
+        //obtenemos lista de chat privados
+        List<ChatPrivado> chatPrivados = chatList.stream()
+                .filter(chat -> chat instanceof ChatPrivado) //filtramos grupos
+                .map(chat -> (ChatPrivado) chat) //los casteamos
+                .collect((Collectors.toList())); //guardamos en lista
+
+        //filtramos los grupos por el nombre del grupo
+        List<ChatGrupal> gruposFiltrados = chatGrupales.stream()
+                .filter(grupo -> grupo.getNombreGrupo().toLowerCase().contains(nombreABuscar.toLowerCase()))
+                .toList();
+
+        //filtramos los chats privados por el email (primero debemos diferenciar cual nuestro email,
+        // ya que cada chat tiene 2 participantes)
+        List<ChatPrivado> privadosFiltrados = chatPrivados.stream()
+                .filter(privado -> {
+                    String email1 = privado.getUsuario1Email().toLowerCase();
+                    String email2 = privado.getUsuario2Email().toLowerCase();
+
+                    String emailDelOtro;
+                    if (email1.equals(usuarioIniciado.getEmail())) {
+                        emailDelOtro = email2;
+                    }else {
+                        emailDelOtro=email1;
+                    }
+                      return emailDelOtro.toLowerCase().contains(nombreABuscar.toLowerCase());
+                        }).toList();
+
+        //creamos arrayList para unir todos los chats filtrados
+        ArrayList<Chat> chatsFiltradosNombre = new ArrayList<>();
+        chatsFiltradosNombre.addAll(privadosFiltrados);
+        chatsFiltradosNombre.addAll(gruposFiltrados);
+
+        //actualizamos la lista de chats con el filtro aplicado
+        chatsListView.setItems(FXCollections.observableArrayList(chatsFiltradosNombre));
+
+    }
+
 }
