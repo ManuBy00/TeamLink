@@ -19,11 +19,9 @@ public abstract class Chat {
 
     /**
      * Constructor para JAXB (Deserialización).
-     * No genera un ID nuevo, usa el ID del XML.
      */
     public Chat() {
         this.mensajes = new ArrayList<>();
-        // El campo 'id' será rellenado por JAXB.
     }
 
     /**
@@ -34,7 +32,7 @@ public abstract class Chat {
     public Chat(boolean nuevo) {
         this(); // Inicializa la lista de mensajes
         if (nuevo) {
-            // Lógica clave: Obtiene el siguiente ID persistente y lo incrementa en el gestor.
+            // Obtiene el siguiente ID persistente y lo incrementa en el gestor.
             this.chatID = ChatsManager.getInstance().getNextIdAndIncrement();
         }
     }

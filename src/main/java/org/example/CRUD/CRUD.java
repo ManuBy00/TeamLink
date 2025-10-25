@@ -11,6 +11,5 @@ public interface CRUD <T>{
 
     void remove(String id) throws ElementoNoEncontrado;
 
-    void mostrar(T elemento);
 
 }

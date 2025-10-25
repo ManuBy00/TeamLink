@@ -64,7 +64,6 @@ public class MainController {
 
     Usuario usuarioIniciado = Sesion.getInstance().getUsuarioIniciado();
 
-
     public enum ChatFilter {
         ALL, PRIVADOS, GRUPALES
     }
@@ -106,7 +105,10 @@ public class MainController {
     }
 
 
-
+    /**
+     * Lanza la ventana modal de creación de chats (grupal o privado).
+     * * Este método lanza el formulario 'NewChatForm.fxml' para añadir un nuevo chat
+     */
     public void addChat(ActionEvent actionEvent) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/teamlink/NewChatForm.fxml"));
         try {
@@ -121,6 +123,9 @@ public class MainController {
         }
     }
 
+    /**
+     * Lanza la ventana del formulario para registrar un nuevo Empleado.
+     */
     public void crearEmpleado(ActionEvent actionEvent) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/teamlink/empleadoForm.fxml"));
         try {
@@ -134,6 +139,10 @@ public class MainController {
         }
     }
 
+
+    /**
+     * Carga todos los chats asociados al usuario logueado y aplica el filtro de tipo actual.
+     */
     private void cargarChats() {
         // Obtenemos los IDs de chat del usuario logueado (que hereda de Usuario)
         Set<Integer> chatIds = usuarioIniciado.getChatsID();
@@ -162,12 +171,14 @@ public class MainController {
 
         chatsListView.setItems(chatsObservableList);
 
-
-
         // Configuramos la apariencia de las celdas (Cell Factory)
         configurarChatCellFactory();
     }
 
+    /**
+     * Configura el CellFactory para el chatsListView, determinando cómo se muestra
+     * cada objeto Chat en la interfaz de usuario (UI).
+     */
     private void configurarChatCellFactory() {
         chatsListView.setCellFactory(lv -> new javafx.scene.control.ListCell<Chat>() {
             @Override
@@ -194,12 +205,18 @@ public class MainController {
         });
     }
 
+
+    /**
+     * Carga y actualiza la vista de mensajes (mensajesListView) con el contenido
+     * del chat seleccionado y configura el encabezado de la conversación.
+     * @param chatSeleccionado El objeto Chat del que se cargarán los mensajes.
+     */
     private void cargarMensajes(Chat chatSeleccionado) {
         // 1. Limpiar cualquier mensaje antiguo
         mensajesListView.getItems().clear();
-
-        // 2. Cargar la lista de mensajes del chat seleccionado
+        //  Cargar la lista de mensajes del chat seleccionado
         ObservableList<Mensaje> mensajes = FXCollections.observableArrayList(chatSeleccionado.getMensajes());
+        // si es un grupo pone el nombre del gurpo en la chatNameLabel, sino, pone el nombre del usuario destinatario.
         if (chatSeleccionado instanceof ChatGrupal){
             chatNameLabel.setText(((ChatGrupal) chatSeleccionado).getNombreGrupo());
         }else {
@@ -221,7 +238,9 @@ public class MainController {
         configurarMensajeCellFactory();
     }
 
-
+    /**
+     * Le da formato a las celdas de los mensajes
+     */
     private void configurarMensajeCellFactory() {
         String usuarioEmail = Sesion.getInstance().getUsuarioIniciado().getEmail();
 
@@ -311,8 +330,15 @@ public class MainController {
         });
     }
 
+    /**
+     * Procesa la acción de enviar un mensaje, validando el contenido de texto y los adjuntos.
+     * Añade el mensaje al chat correspondiente y lo escribe en el xml
+     * @param actionEvent El evento disparado al hacer clic en el botón "Enviar".
+     */
     public void sendMensaje(ActionEvent actionEvent) {
+        //obtiene el chat seleccionado de la listView
         Chat chatSeleccionado = chatsListView.getSelectionModel().getSelectedItem();
+        //obtiene el contenido y el adjunto
         String contenido = mensajeTextArea.getText();
         Adjunto adjunto = adjuntoTemporal;
         Mensaje msg;
@@ -335,12 +361,13 @@ public class MainController {
 
         XML.writeXML(ChatsManager.getInstance(), "Chats.XML");
 
+        //actualizar la listview
         mensajesListView.getItems().add(msg);
 
-        // B. Limpiar el área de texto
+        // Limpiar el área de texto
         mensajeTextArea.clear();
 
-        // C. Desplazarse al último mensaje para que sea visible
+        // Desplazarse al último mensaje para que sea visible
         mensajesListView.scrollTo(mensajesListView.getItems().size() - 1);
 
         adjuntoTemporal = null;
@@ -351,10 +378,11 @@ public class MainController {
         fileChooser.setTitle("Seleccionar Archivo Adjunto");
 
         Stage st = (Stage) sendMensajeButton.getScene().getWindow();
+        //abrimos filechooser en modo openDialog en la ventana que hemos creado
         File archivoSeleccionado = fileChooser.showOpenDialog(st);
 
+        //Crear el directorio de media/ si no existe
         if (archivoSeleccionado != null) {
-            // 3. Crear el directorio de media/ si no existe
             File mediaDirectory = new File("MEDIA_DIR");
             if (!mediaDirectory.exists()) {
                 mediaDirectory.mkdirs();
@@ -362,6 +390,7 @@ public class MainController {
         }
 
         String nombreUnico = "_" + archivoSeleccionado.getName();
+        //creamos el archivo donde vamos a escribir pasandole la ruta y el nombre del archivo original
         File archivoDestino = new File(MEDIA_DIR + nombreUnico);
 
         // Declaramos los streams fuera del try para que el bloque 'finally' pueda acceder a ellos.
@@ -369,19 +398,16 @@ public class MainController {
         OutputStream os = null;
 
         try {
-            // Inicialización de los Streams (Dentro del try)
+            // Inicialización de los Streams
             is = new BufferedInputStream(new FileInputStream(archivoSeleccionado));
             os = new BufferedOutputStream(new FileOutputStream(archivoDestino));
-
             //Copia Manual
             byte[] buffer = new byte[1024]; // Búfer de 1 KB
             int bytesRead;
-
             // Leer del InputStream y escribir al OutputStream hasta que no queden más bytes
             while ((bytesRead = is.read(buffer)) != -1) {
                 os.write(buffer, 0, bytesRead);
             }
-
             // 3. Validación de Tamaño (Debe ocurrir después de la copia exitosa)
             long maxSize = 10 * 1024 * 1024; // 10 Megabytes
 
@@ -390,19 +416,18 @@ public class MainController {
                 Utilidades.mostrarAlerta("Error", "El archivo excede el tamaño máximo permitido (10 MB).");
             }
 
-            // 5. Creación del Objeto Adjunto
+            //Creación del Objeto Adjunto
             String tipo = Files.probeContentType(archivoDestino.toPath()); //determina el tipo de archivo
             if (tipo == null){
                 tipo = "application/octet-stream"; //si es un tipo desconocido, le asigna un valor genérico
             }
-
+            //creamos objeto adjunto y lo pasamos a la variable de clase para que sea accesible desde sendMensaje()
             Adjunto adjunto = new Adjunto(nombreUnico, archivoDestino.getPath(), Files.size(archivoDestino.toPath()), tipo);
             adjuntoTemporal = adjunto;
-            // 6. Feedback en la UI
+            //Feedback en la UI
             Utilidades.mostrarAlerta("Archivo adjuntado", "[ADJUNTO] " + nombreUnico + " listo para enviar. Escriba texto si lo desea.");
 
         } catch (IOException e) {
-            // Si ocurre un error de I/O durante la inicialización, la lectura o la escritura
             Utilidades.mostrarAlerta("Error I/O", "Hubo un error al copiar el archivo.");
             e.printStackTrace();
 
@@ -419,17 +444,20 @@ public class MainController {
                 e.printStackTrace();
             }
         }
-
     }
 
+    /**
+     * Abre el archivo físico adjunto en el sistema operativo utilizando su programa predeterminado.
+     * @param adjunto El objeto Adjunto que contiene la ruta guardada del archivo a abrir.
+     */
     private void abrirAdjunto(Adjunto adjunto) {
         File archivo = new File(adjunto.getRutaGuardada());
-
+        // Verifica que el archivo aún exista en la ruta guardada (getRutaGuardada()).
         if (!archivo.exists()) {
             Utilidades.mostrarAlerta("Error", "El archivo adjunto no se encuentra.");
             return;
         }
-
+        //Utiliza la clase Desktop para intentar abrir el archivo, si el sistema lo soporta.
         if (Desktop.isDesktopSupported()) {
             try {
                 Desktop.getDesktop().open(archivo);
@@ -442,15 +470,19 @@ public class MainController {
         }
     }
 
+    /**
+     * Gestiona el proceso completo de exportación de una conversación a un archivo ZIP.
+     */
    public void exportarChat(ActionEvent actionEvent) {
         Chat chatSeleccionado = chatsListView.getSelectionModel().getSelectedItem();
+        // Valida que haya un chat seleccionado y configura el FileChooser en modo guardar (ZIP).
         if (chatSeleccionado == null){
             Utilidades.mostrarAlerta("Elemento vacío", "Debes seleccionar un chat");
         }
-
+        // configura el FileChooser en modo guardar (ZIP).
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Selecciona una ruta para el informe");
-       fileChooser.setInitialFileName("chat_exportacion_" + chatSeleccionado.getChatID());
+        fileChooser.setInitialFileName("chat_exportacion_" + chatSeleccionado.getChatID());
 
        fileChooser.getExtensionFilters().add(
                new FileChooser.ExtensionFilter("Archivo ZIP (*.zip)", "*.zip")
@@ -462,10 +494,10 @@ public class MainController {
 
         if (archivoDestino!=null){
             try {
-                // 1. Generar el contenido del informe en una String
+                //Generar el contenido del informe en una String
                 String contenidoInforme = generarContenidoInforme(chatSeleccionado);
 
-                // 2. Ejecutar la lógica de empaquetado (creando el ZIP y añadiendo archivos)
+                // Ejecutar la lógica de empaquetado (creando el ZIP y añadiendo archivos)
                 empaquetarConversacionEnZip(chatSeleccionado, contenidoInforme, archivoDestino);
 
                 Utilidades.mostrarAlerta("Éxito", "Conversación y adjuntos empaquetados correctamente en: " + archivoDestino.getAbsolutePath());
@@ -477,7 +509,7 @@ public class MainController {
         }
     }
 
-    // Método auxiliar para generar el texto (reutilizado de tu código)
+    // Metodo auxiliar para generar el texto (reutilizado de tu código)
     private String generarContenidoInforme(Chat chat) {
         StringBuilder sb = new StringBuilder();
         sb.append("--- INFORME DE CONVERSACIÓN (ID: ").append(chat.getChatID()).append(") ---\n\n");
@@ -492,10 +524,17 @@ public class MainController {
         return sb.toString();
     }
 
+    /**
+     * Empaqueta la conversación seleccionada y todos sus archivos adjuntos en un único archivo ZIP.
+     *
+     * @param chatSeleccionado El objeto Chat del que se extraen los mensajes y adjuntos.
+     * @param contenidoInforme La String que contiene la transcripción del chat a añadir como archivo .txt.
+     * @param archivoDestino El objeto File que representa el archivo ZIP a crear.
+     * @throws IOException Si ocurre un error de I/O durante la escritura del archivo o el manejo de streams.
+     */
     private void empaquetarConversacionEnZip(Chat chatSeleccionado, String contenidoInforme, File archivoDestino) throws IOException {
-        // 1. Inicializar ZipOutputStream (usando try-with-resources para el cierre automático)
+        // 1. Inicializar ZipOutputStream
         try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(archivoDestino))) {
-
             // --- A. Añadir el Informe de Conversación (Texto) ---
 
             // Crear una entrada ZIP para el archivo de texto
@@ -541,6 +580,10 @@ public class MainController {
     }    // zos (ZipOutputStream) se cierra automáticamente aquí, finalizando el archivo ZIP
 
 
+    /**
+     * Muestra un informe estadístico del chat seleccionado en una nueva ventana básica.
+     * @param actionEvent El evento disparado al hacer clic en el botón "Resumen".
+     */
     public void generarResumen(ActionEvent actionEvent) {
         Chat chatSeleccionado = chatsListView.getSelectionModel().getSelectedItem();
 
@@ -585,6 +628,13 @@ public class MainController {
         }
     }
 
+    /**
+     * Procesa la lista de mensajes de un chat utilizando la API de Java Streams para calcular estadísticas detalladas.
+     * Los resultados se encapsulan en un nuevo objeto ResumenChat.
+     * @param listaMensajes La lista de mensajes a analizar.
+     * @param chat El objeto Chat seleccionado, usado para la referencia del informe.
+     * @return Un objeto ResumenChat que contiene todas las estadísticas calculadas.
+     */
     private ResumenChat analizarChatConStreams(List<Mensaje> listaMensajes, Chat chat) {
         // A. Conteo Total
         long totalMensajes = listaMensajes.stream().count();
@@ -622,17 +672,28 @@ public class MainController {
         return new ResumenChat(chat, totalMensajes, mensajesPorUsuario, topPalabras,mensajesConAdjunto);
     }
 
-
+    /**
+     * cambia va variable de clase currentFilter para que se aplica al cargar chats
+     * @param mouseEvent
+     */
     public void filtrarGrupos(MouseEvent mouseEvent) {
         currentFilter = ChatFilter.GRUPALES;
         cargarChats();
     }
 
+    /**
+     * cambia va variable de clase currentFilter para que se aplica al cargar chats
+     * @param mouseEvent
+     */
     public void filtrarPrivados(MouseEvent mouseEvent) {
         currentFilter = ChatFilter.PRIVADOS;
         cargarChats();
     }
 
+    /**
+     * cambia va variable de clase currentFilter para que se aplica al cargar chats
+     * @param mouseEvent
+     */
     public void allChats(MouseEvent mouseEvent) {
         currentFilter = ChatFilter.ALL;
         cargarChats();
@@ -693,4 +754,44 @@ public class MainController {
 
     }
 
+    /**
+     * Lanza la ventana modal para añadir nuevos participantes al chat de grupo seleccionado.
+     */
+    public void lanzarAddParticipantes(ActionEvent event) {
+        Chat chatSeleccionado = chatsListView.getSelectionModel().getSelectedItem();
+
+        if (usuarioIniciado instanceof Empleado){
+            Utilidades.mostrarAlerta("Error", "No tienes permisos para esta opción.");
+            return;
+        }
+
+        if (!(chatSeleccionado instanceof ChatGrupal)) {
+            Utilidades.mostrarAlerta("Error", "Solo puedes añadir participantes a chats grupales.");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/teamlink/addParticipantForm.fxml"));
+            Parent root = loader.load();
+
+            // Obtener el controlador del formulario
+            AddParticipanteController controller = loader.getController();
+
+            // Pasar el objeto ChatGrupal al nuevo controlador
+            controller.setChatGrupal((ChatGrupal) chatSeleccionado);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Añadir Participantes");
+            stage.showAndWait();
+
+            // Recargar la vista principal si es necesario (el chat se habrá actualizado)
+            cargarChats();
+            cargarMensajes(chatSeleccionado); // Recargar los mensajes para refrescar la lista de participantes si se muestra
+
+        } catch (IOException e) {
+            Utilidades.mostrarAlerta("Error", "No se pudo cargar el formulario de participantes.");
+            e.printStackTrace();
+        }
+    }
 }

@@ -110,9 +110,11 @@
                           <Insets bottom="10.0" left="15.0" right="-20.0" top="15.0" />
                       </padding>
                       <style>-fx-background-color: #BDC3C7;</style> </Label>
-                  <Button fx:id="exportarButton" mnemonicParsing="false" onAction="#exportarChat" prefHeight="26.0" prefWidth="159.0" text="Exportar">
+
+
+                  <Button fx:id="exportarButton" mnemonicParsing="false" onAction="#exportarChat" prefHeight="26.0" prefWidth="155.0" text="Exportar">
                      <HBox.margin>
-                        <Insets left="200.0" right="20.0" top="20.0" />
+                        <Insets left="100.0" right="20.0" top="20.0" />
                      </HBox.margin>
                   </Button>
                   <Button fx:id="resumenButton" mnemonicParsing="false" onAction="#generarResumen" prefHeight="26.0" prefWidth="153.0" text="Resumen">
@@ -123,6 +125,20 @@
                         <Insets right="5.0" />
                      </padding>
                   </Button>
+
+                   <Button fx:id="addParticipantButton"
+                           mnemonicParsing="false"
+                           onAction="#lanzarAddParticipantes"
+                           styleClass="add-button"                 text="+"
+                   >
+                       <font>
+                           <Font name="System Bold" size="18.0" />
+                       </font>
+                       <HBox.margin>
+                           <Insets right="10.0" top="15.0" />
+                       </HBox.margin>
+                   </Button>
+
                </children>
             </HBox>
             <ListView fx:id="mensajesListView" style="-fx-background-color: #ECF0F1; -fx-control-inner-background: #ECF0F1; -fx-border-color: transparent; -fx-border-radius: ;" VBox.vgrow="ALWAYS">

@@ -42,7 +42,15 @@ public class EmpresaFormController {
         // Llenar comboBox con roles
     }
 
-
+    /**
+     * Procesa el registro de una nueva cuenta de Empresa en el sistema.
+     * 1. Recoge los datos de todos los campos del formulario.
+     * 2. Realiza validaciones esenciales: campos no vacíos y formato de correo electrónico válido.
+     * 3. Crea una nueva instancia de la clase Empresa, que hashea la contraseña.
+     * 4. Intenta añadir la nueva Empresa al UsuariosManager; si el email ya existe, captura ElementoRepetido.
+     * 5. Si es exitoso, persiste los cambios llamando a XML.writeXML() en Usuarios.XML.
+     * 6. Finalmente, cierra la ventana del formulario de registro.
+     */
     public void registrarEmpresa(ActionEvent actionEvent) {
         String nombre = nombreEmpresaField.getText();
         String email = emailField.getText();

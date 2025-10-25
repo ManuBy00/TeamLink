@@ -1,25 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="300" prefWidth="400.0" style="-fx-background-color: #4A90E2;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.Controller.LoginController">
+<AnchorPane prefHeight="300" prefWidth="400.0" style="-fx-background-color: linear-gradient(to bottom right, #2C3E50, #34495E);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.Controller.LoginController">
 
-    <VBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="257.0" prefWidth="291.0" spacing="10" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="60.0">
+    <VBox alignment="CENTER" prefHeight="257.0" prefWidth="291.0" spacing="15" style="-fx-background-color: white;                  -fx-background-radius: 10;                  -fx-padding: 25 35 25 35;                  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0.5, 0, 0);" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="60.0">
 
-        <ImageView fitHeight="164.0" fitWidth="181.0" preserveRatio="true">
+        <ImageView fitHeight="114.0" fitWidth="127.0" preserveRatio="true">
             <image>
                 <Image url="@../../../Images/Logo.png" />
             </image>
+            <VBox.margin><Insets bottom="10.0" top="10.0" /></VBox.margin>
         </ImageView>
 
-        <TextField fx:id="emailField" prefHeight="14.0" prefWidth="290.0" promptText="Correo electrónico" />
+        <TextField fx:id="emailField" prefHeight="35.0" prefWidth="290.0" promptText="Correo electrónico" style="-fx-background-radius: 5; -fx-border-color: #BDC3C7; -fx-border-radius: 5;" />
 
-        <PasswordField fx:id="passwordField" prefWidth="250" promptText="Contraseña" />
+        <PasswordField fx:id="passwordField" prefHeight="35.0" prefWidth="250" promptText="Contraseña" style="-fx-background-radius: 5; -fx-border-color: #BDC3C7; -fx-border-radius: 5;" />
 
-        <Button fx:id="loginButton" onAction="#login" prefWidth="150" text="Iniciar sesión" />
-        <Hyperlink fx:id="regFormLink" onAction="#lanzarRegForm" style="-fx-text-fill: black;" text="¿No tienes cuenta? Haz click aquí." />
+        <Button fx:id="loginButton" onAction="#login" prefWidth="150" style="-fx-background-color: #3498DB; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;" text="Iniciar sesión">
+            <VBox.margin><Insets top="5.0" /></VBox.margin>
+        </Button>
+
+        <Hyperlink fx:id="regFormLink" onAction="#lanzarRegForm" style="-fx-text-fill: #3498DB; -fx-font-size: 11px;" text="¿No tienes cuenta? Haz click aquí." />
 
         <Label fx:id="errorLabel" textFill="RED" visible="false" />
 

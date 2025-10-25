@@ -66,6 +66,10 @@ public class ChatFormController {
         });
     }
 
+    /**
+     * Procesa la creación de un nuevo Chat Grupal y guarda los cambios en el xml.
+     * @return El objeto ChatGrupal recién creado.
+     */
     public ChatGrupal crearGrupo(ActionEvent actionEvent) {
         ChatsManager cm = ChatsManager.getInstance();
 
@@ -77,17 +81,18 @@ public class ChatFormController {
             return null;
         }
 
+        //Convierte la lista de Usuarios seleccionados en una lista de emails (referencias).
         List<String> correosUsuarios = usuariosGrupo.stream().map(Usuario::getEmail).toList();
-
-
+        //crea el objeto grupo
         ChatGrupal grupo = new ChatGrupal(nombre, correosUsuarios, usuarioIniciado.getEmail());
         try {
+            //lo añade a la lista
             cm.add(grupo);
         } catch (ElementoRepetido e) {
             throw new RuntimeException(e);
         }
 
-        // Añadir el ID a todos los miembros (usando el UsuariosManager para buscarlos)
+        // Añade el ID del chat a todos los miembros (usando el UsuariosManager para buscarlos)
         usuarioIniciado.getChatsID().add(grupo.getChatID());
         for (String email : correosUsuarios) {
             Usuario u = UsuariosManager.getInstance().buscarUsuario(email);
@@ -95,8 +100,7 @@ public class ChatFormController {
                 u.getChatsID().add(grupo.getChatID());
             }
         }
-
-
+        //guarda los cambios en ambos XML
         XML.writeXML(cm, "Chats.XML");
         XML.writeXML(UsuariosManager.getInstance(), "Usuarios.XML");
 
@@ -106,25 +110,33 @@ public class ChatFormController {
         return grupo;
     }
 
+    /**
+     * Procesa la creación de un nuevo Chat Privado y guarda los cambios en el xml.
+     * @param actionEvent El evento disparado al hacer clic en el botón "Crear chat privado".
+     */
     public void crearChatPrivado(ActionEvent actionEvent) {
         ChatsManager cm = ChatsManager.getInstance();
         Usuario usuarioActual = Sesion.getInstance().getUsuarioIniciado();
         Usuario usuario2 = miembrosGrupalListView.getSelectionModel().getSelectedItem();
 
+        // Valida que el chat no exista previamente entre los dos participantes utilizando ChatsManager.buscarChatPrivadoPorParticipantes().
         if (cm.buscarChatPrivadoPorParticipantes(usuarioActual.getEmail(), usuario2.getEmail()) !=null){
             Utilidades.mostrarAlerta("Error", "Ya existe un chat con este usuario");
             return;
         }
-
+        // Crea un nuevo objeto ChatPrivado
         ChatPrivado nuevoChat = new ChatPrivado(usuarioActual.getEmail(), usuario2.getEmail());
         try {
+            // Se añade al chatManager
             cm.add(nuevoChat);
         } catch (ElementoRepetido e) {
             throw new RuntimeException(e);
         }
+        //se asigna el id del chat a los participantes
         usuarioActual.getChatsID().add(nuevoChat.getChatID());
         usuario2.getChatsID().add(nuevoChat.getChatID());
 
+        //se guardan los xml
         XML.writeXML(cm, "Chats.XML");
         XML.writeXML(UsuariosManager.getInstance(), "Usuarios.XML");
 

@@ -8,6 +8,18 @@ import javax.xml.bind.Unmarshaller;
 import java.io.File;
 
 public class XML {
+
+    /**
+     * Serializa un objeto Java genérico a un archivo XML utilizando JAXB (Marshalling).
+     *
+     * Este método es fundamental para la persistencia offline del proyecto.
+     * Configura la salida del XML para ser formateada y utiliza codificación UTF-8.
+     *
+     * @param objeto El objeto Java (Manager) a serializar.
+     * @param fileName El nombre del archivo XML de destino.
+     * @return true si la serialización fue exitosa.
+     * @throws RuntimeException Si ocurre un JAXBException durante la serialización.
+     */
     public static <T> boolean writeXML(T objeto, String fileName) {
         boolean result = false;
         try {
@@ -28,6 +40,16 @@ public class XML {
         return result;
     }
 
+    /**
+     * Deserializa un archivo XML en una instancia de la clase especificada (Unmarshalling).
+     *
+     * Este método se utiliza en los Managers (Singleton) para cargar el estado persistente
+     * de la aplicación desde el disco.
+     *
+     * @param clazz La clase de tipo T a la que se desea deserializar el XML.
+     * @param fileName El nombre del archivo XML de origen.
+     * @return El objeto deserializado de tipo T, o null si ocurre un JAXBException.
+     */
     public static <T> T readXML(Class<T> clazz, String fileName) {
         T objeto = null;
         try {

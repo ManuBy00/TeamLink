@@ -71,11 +71,6 @@ public class UsuariosManager implements CRUD<Usuario>{
 
     }
 
-    @Override
-    public void mostrar(Usuario elemento) {
-
-    }
-
     public Usuario buscarUsuario(String email){
         Usuario usuarioEncontrado = null;
         for (Usuario usuario : usuariosList){

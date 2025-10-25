@@ -27,7 +27,7 @@ public class ChatsManager implements CRUD<Chat> {
     private static ChatsManager instance;
     private static final String FILE_NAME = "Chats.XML"; // Nombre del archivo XML
 
-    // Constructor privado para el patrón Singleton
+
     private ChatsManager() {
         this.chatsList = new ArrayList<>();
     }
@@ -64,6 +64,11 @@ public class ChatsManager implements CRUD<Chat> {
 
     // --- Implementación de la Interfaz CRUD ---
 
+    /**
+     * Añade una chat a la lista
+     * @param chat el chat a añadir
+     * @throws ElementoRepetido si ya hay un chat con el mismo id
+     */
     @Override
     public void add(Chat chat) throws ElementoRepetido {
         if (buscarChatPorId(chat.getChatID()) != null) {
@@ -72,6 +77,11 @@ public class ChatsManager implements CRUD<Chat> {
         this.chatsList.add(chat);
     }
 
+    /**
+     * Acualiza un chat borrando el antiguo y añadiendo el nuevo.
+     * @param chatActualizado
+     * @throws ElementoNoEncontrado
+     */
     @Override
     public void update(Chat chatActualizado) throws ElementoNoEncontrado {
         Chat chatAntiguo = buscarChatPorId(chatActualizado.getChatID());
@@ -85,6 +95,11 @@ public class ChatsManager implements CRUD<Chat> {
 
     }
 
+    /**
+     * Elimina el chat de la lista de chatManager
+     * @param chatIdString
+     * @throws ElementoNoEncontrado si el chat no existe
+     */
     @Override
     public void remove(String chatIdString) throws ElementoNoEncontrado {
         int chatId = Integer.parseInt(chatIdString);
@@ -97,7 +112,13 @@ public class ChatsManager implements CRUD<Chat> {
         this.chatsList.remove(chatAEliminar);
     }
 
-
+    /**
+     * Busca y recupera un objeto Chat de la lista central utilizando su ID único.
+     * Este método utiliza Streams para iterar de manera eficiente sobre la lista de chats,
+     * comparando el chatId proporcionado.
+     * @param chatId El ID entero del chat a buscar.
+     * @return El objeto Chat encontrado, o null si no se encuentra ninguna coincidencia.
+     */
     public Chat buscarChatPorId(int chatId) {
 
         Chat chatEncontrado = this.chatsList.stream().filter(c -> c.getChatID() == chatId).findFirst().orElse(null);
@@ -138,10 +159,6 @@ public class ChatsManager implements CRUD<Chat> {
         return null;
     }
 
-    // --- Métodos obligatorios de la interfaz (dejados vacíos por ahora) ---
-
-    @Override
-    public void mostrar(Chat elemento) { /* ... */ }
 
     /**
      * Filtra una lista de chats basándose en el tipo de filtro especificado.

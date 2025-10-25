@@ -35,9 +35,8 @@ public class Empresa extends Usuario{
 
     // Constructor para JAXB (inicializa las colecciones)
     public Empresa(){
-        // Llama al constructor de Usuario (que inicializa chatIds)
         super();
-        // Inicialización crucial para evitar NullPointerException
+        // Inicialización para evitar NullPointerException
         this.empleados = new HashSet<>();
     }
 
@@ -75,7 +74,6 @@ public class Empresa extends Usuario{
         this.sector = sector;
     }
 
-    // --- Métodos de Gestión de Empleados ---
 
     public Set<String> getEmpleados() {
         return empleados;
@@ -85,9 +83,7 @@ public class Empresa extends Usuario{
         this.empleados = empleados;
     }
 
-    // NOTA: Se eliminan los getters/setters obsoletos de ArrayList<Chat>
 
-    // C - CREATE
     public void addEmpleado(Empleado empleado) throws ElementoRepetido {
         // La comprobación de duplicados se hace con el email (que es la String en el HashSet)
         if (this.empleados.contains(empleado.getEmail())) {
@@ -97,7 +93,6 @@ public class Empresa extends Usuario{
         this.empleados.add(empleado.getEmail());
     }
 
-    // R - READ (Referencia y Búsqueda en el gestor central)
     public Empleado buscarEmpleadoEnEmpresa(String emailBuscado) {
         if (this.empleados.contains(emailBuscado)) {
             Usuario usuarioEncontrado = UsuariosManager.getInstance().buscarUsuario(emailBuscado);
@@ -108,7 +103,6 @@ public class Empresa extends Usuario{
         return null;
     }
 
-    // U - UPDATE (Delega la actualización al gestor central)
     public void updateEmpleado(Empleado empleadoActualizado) throws ElementoNoEncontrado {
         String emailBuscado = empleadoActualizado.getEmail();
 
@@ -136,13 +130,11 @@ public class Empresa extends Usuario{
         }
 
         // El empleado debe ser eliminado del sistema central (UsuariosManager) también,
-        // pero esa responsabilidad es mejor dejarla en el controlador o una capa de servicio.
 
-        // 1. Elimina la referencia local
+        // Elimina la referencia local
         this.empleados.remove(email);
 
-        // 2. NOTA: Aquí se debería llamar a UsuariosManager.getInstance().remove(email)
+        // Aquí se debería llamar a UsuariosManager.getInstance().remove(email)
         // para eliminar el objeto Usuario completo del sistema central.
-        // Esto se hace fuera de la clase Empresa para mantener su responsabilidad limpia.
     }
 }

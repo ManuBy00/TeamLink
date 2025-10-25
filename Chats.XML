@@ -1,81 +1,69 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <ListaConversaciones>
-    <Chat xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="chatPrivado">
+    <Chat xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="chatGrupal">
         <chatID>1</chatID>
-        <ListaDeMensajes>
-            <Mensaje>
-                <Contenido>Buenas tardes
-                </Contenido>
-                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
-                <FechaHora>2025-10-22T19:41:23.1422451</FechaHora>
-            </Mensaje>
-            <Mensaje>
-                <Contenido>Todo bien hoy?</Contenido>
-                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
-                <FechaHora>2025-10-22T19:41:31.7578356</FechaHora>
-            </Mensaje>
-            <Mensaje>
-                <Contenido>te envío el logo</Contenido>
-                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
-                <Adjunto>
-                    <NombreOriginal>_Screenshot 2025-10-23 125240.png</NombreOriginal>
-                    <RutaGuardada>MEDIA_DIR\_Screenshot 2025-10-23 125240.png</RutaGuardada>
-                    <TamanoBytes>24576</TamanoBytes>
-                    <TipoMime>image/png</TipoMime>
-                </Adjunto>
-                <FechaHora>2025-10-23T17:23:58.0363842</FechaHora>
-            </Mensaje>
-        </ListaDeMensajes>
-        <Usuario1Email>admin@gmail.com</Usuario1Email>
-        <Usuario2Email>empleado@gmail.com</Usuario2Email>
+        <ListaDeMensajes/>
+        <nombreGrupo>General</nombreGrupo>
+        <MiembrosDelGrupo>
+            <Email>Jose@gmail.com</Email>
+            <Email>manuel@gmail.com</Email>
+            <Email>juan@gmail.com</Email>
+        </MiembrosDelGrupo>
+        <emailEmpresa>sepalo@gmail.com</emailEmpresa>
     </Chat>
     <Chat xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="chatGrupal">
         <chatID>2</chatID>
         <ListaDeMensajes>
             <Mensaje>
-                <Contenido>Buenas tardes</Contenido>
-                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
-                <FechaHora>2025-10-22T20:02:44.2445771</FechaHora>
+                <Contenido>Buenas tardes. ¿Cómo va el proyecto?</Contenido>
+                <RemitenteEmail>sepalo@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-25T14:13:34.0308055</FechaHora>
             </Mensaje>
             <Mensaje>
-                <Contenido>esto es un chat grupal</Contenido>
-                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
-                <FechaHora>2025-10-22T20:02:50.8739337</FechaHora>
+                <Contenido>Todo bien, no hay ninguna incidencia de momento.</Contenido>
+                <RemitenteEmail>manuel@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-25T14:14:23.3934303</FechaHora>
             </Mensaje>
             <Mensaje>
-                <Contenido>buenas tardes admin</Contenido>
-                <RemitenteEmail>empleado@gmail.com</RemitenteEmail>
-                <FechaHora>2025-10-22T20:03:16.7358065</FechaHora>
+                <Contenido>Gracias.</Contenido>
+                <RemitenteEmail>manuel@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-25T14:14:26.7484212</FechaHora>
             </Mensaje>
         </ListaDeMensajes>
-        <nombreGrupo>General</nombreGrupo>
+        <nombreGrupo>Departamento de Desarrollo</nombreGrupo>
         <MiembrosDelGrupo>
-            <Email>empleado@gmail.com</Email>
-            <Email>empleado2@gmail.com</Email>
+            <Email>Jose@gmail.com</Email>
+            <Email>manuel@gmail.com</Email>
         </MiembrosDelGrupo>
-        <emailEmpresa>admin@gmail.com</emailEmpresa>
+        <emailEmpresa>sepalo@gmail.com</emailEmpresa>
     </Chat>
     <Chat xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="chatGrupal">
         <chatID>3</chatID>
-        <ListaDeMensajes>
-            <Mensaje>
-                <Contenido>fgds
-</Contenido>
-                <RemitenteEmail>admin@gmail.com</RemitenteEmail>
-                <FechaHora>2025-10-23T17:25:51.2916634</FechaHora>
-            </Mensaje>
-        </ListaDeMensajes>
-        <nombreGrupo></nombreGrupo>
+        <ListaDeMensajes/>
+        <nombreGrupo>Departamento de administración</nombreGrupo>
         <MiembrosDelGrupo>
-            <Email>empleado@gmail.com</Email>
+            <Email>juan@gmail.com</Email>
+            <Email>manuel@gmail.com</Email>
         </MiembrosDelGrupo>
-        <emailEmpresa>admin@gmail.com</emailEmpresa>
+        <emailEmpresa>sepalo@gmail.com</emailEmpresa>
     </Chat>
     <Chat xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="chatPrivado">
         <chatID>4</chatID>
-        <ListaDeMensajes/>
-        <Usuario1Email>admin@gmail.com</Usuario1Email>
-        <Usuario2Email>empleado2@gmail.com</Usuario2Email>
+        <ListaDeMensajes>
+            <Mensaje>
+                <Contenido>Ven a mi despacho cuando puedas</Contenido>
+                <RemitenteEmail>sepalo@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-25T14:18:42.3199977</FechaHora>
+            </Mensaje>
+            <Mensaje>
+                <Contenido>Voy en 10 minutos, estoy terminando una implementación</Contenido>
+                <RemitenteEmail>manuel@gmail.com</RemitenteEmail>
+                <FechaHora>2025-10-25T14:19:39.6222251</FechaHora>
+            </Mensaje>
+        </ListaDeMensajes>
+        <Usuario1Email>sepalo@gmail.com</Usuario1Email>
+        <Usuario2Email>manuel@gmail.com</Usuario2Email>
     </Chat>
-    <NextChatID>5</NextChatID>
+
+    <NextChatID>6</NextChatID>
 </ListaConversaciones>

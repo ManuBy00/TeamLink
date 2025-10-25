@@ -38,12 +38,14 @@ public class EmpleadoFormController {
         if (Sesion.getInstance().getUsuarioIniciado() instanceof Empresa) {
             empresaActual = (Empresa) Sesion.getInstance().getUsuarioIniciado();
         } else {
-
             Utilidades.mostrarAlerta("Acceso Denegado", "Solo las cuentas de Empresa pueden registrar nuevos empleados.");
             ((Stage) emailField.getScene().getWindow()).close();
         }
     }
 
+    /**
+     * Procesa el registro de un nuevo Empleado por parte de la Empresa logueada.
+     */
     @FXML
     private void RegistrarEmpleado(ActionEvent event) {
         if (empresaActual == null) {
@@ -78,12 +80,12 @@ public class EmpleadoFormController {
             // Agregamos el empleado a la lista de la empresa (si Empresa tiene ese método)
             empresaActual.addEmpleado(nuevoEmpleado);
 
-            // 4. Serializar (Guardar los cambios en el XML)
+            // Serializar (Guardar los cambios en el XML)
             XML.writeXML(UsuariosManager.getInstance(), "Usuarios.XML");
 
             Utilidades.mostrarAlerta("Éxito", "Empleado " + nombre + " registrado con éxito en " + empresa + ".");
 
-            // 5. Cerrar el formulario
+            // Cerrar el formulario
             Stage stage = (Stage) emailField.getScene().getWindow();
             stage.close();
 

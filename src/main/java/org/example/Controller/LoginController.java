@@ -27,6 +27,11 @@ public class LoginController {
     private TextField passwordField;
 
 
+    /**
+     * Lanza la ventana para el formulario de registro de empresas.
+     * Carga el FXML 'ResgistroEmpresas.fxml' y lo muestra en un nuevo Stage.
+     * @param actionEvent El evento disparado al hacer clic en el enlace de registro.
+     */
     public void lanzarRegForm(ActionEvent actionEvent) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/teamlink/ResgistroEmpresas.fxml"));
         try {
@@ -43,7 +48,14 @@ public class LoginController {
         }
     }
 
-
+    /**
+     * Procesa la autenticación del usuario.
+     *
+     * 1. Busca el Usuario en el UsuariosManager y verifica la contraseña.
+     * 2. Si el login es exitoso, inicia la sesión (Sesion.logIn()).
+     * 3. Carga el 'mainView.fxml' en un nuevo Stage y cierra la ventana de Login actual.
+     * 4. Si la autenticación falla, muestra una alerta de error.
+     */
     public void login(ActionEvent actionEvent) {
         String email = emailField.getText();
         String password = passwordField.getText();

@@ -1,49 +1,66 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <ListaUsuarios>
-    <Usuario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="empleado">
-        <email>empleado@gmail.com</email>
-        <nombre>empleado</nombre>
-        <password>$2a$10$sL5AiBshNtbbBP/D7UdGrey7z06OHID3KGFNblYfDpngISyMeFOpO</password>
-        <ListaDeChatIDs>
-            <ChatID>1</ChatID>
-            <ChatID>2</ChatID>
-            <ChatID>3</ChatID>
-        </ListaDeChatIDs>
-        <empresa>admin@gmail.com</empresa>
-        <departamento>0900</departamento>
-        <manager>false</manager>
-        <puesto>000</puesto>
-    </Usuario>
     <Usuario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="empresa">
-        <email>admin@gmail.com</email>
-        <nombre>admin</nombre>
-        <password>$2a$10$DGMtXZAx6fepXT1nrK0Z6.x2M7k56zK6plD4L5vkmSUcIhxRAF/j.</password>
+        <email>sepalo@gmail.com</email>
+        <nombre>Sepalo Software</nombre>
+        <password>$2a$10$/dPU0y6pnYcXKSpDq.HEx.b4DkJryPrdlyTQ30pfeFKTEHAu/FAga</password>
         <ListaDeChatIDs>
             <ChatID>1</ChatID>
             <ChatID>2</ChatID>
             <ChatID>3</ChatID>
             <ChatID>4</ChatID>
+            <ChatID>5</ChatID>
         </ListaDeChatIDs>
-        <direccion>000</direccion>
-        <telefono>000</telefono>
-        <descripcion>000</descripcion>
+        <direccion>Calle Machaquito 5</direccion>
+        <telefono>656584926</telefono>
+        <descripcion>En SEPALO Software, llevamos más de 10 años ayudando a administraciones públicas y empresas privadas a optimizar su gestión y mejorar su relación con sus usuarios.
+            Nuestro valor radica en nuestra capacidad para transformar desafíos complejos en oportunidades de mejora, siempre con un enfoque centrado en la eficiencia, la accesibilidad y la innovación.</descripcion>
         <sector>Tecnología</sector>
         <ListaEmpleadosEmails>
-            <EmailEmpleado>empleado</EmailEmpleado>
-            <EmailEmpleado>empleado2@gmail.com</EmailEmpleado>
+            <EmailEmpleado>Jose@gmail.com</EmailEmpleado>
+            <EmailEmpleado>manuel@gmail.com</EmailEmpleado>
+            <EmailEmpleado>juan@gmail.com</EmailEmpleado>
         </ListaEmpleadosEmails>
     </Usuario>
     <Usuario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="empleado">
-        <email>empleado2@gmail.com</email>
-        <nombre>empleado2</nombre>
-        <password>$2a$10$nPHyTRNjDiV0THUQzDC2y.mqfrrpgbo3cFwY9EwJhrmE/0Dh.3Fvy</password>
+        <email>Jose@gmail.com</email>
+        <nombre>Jose Antonio Fernández</nombre>
+        <password>$2a$10$lZLbR5WrQ5V7lqFyT.RrxuniEUBft5.fB2NTBAIbWSw3ooBJVPejm</password>
         <ListaDeChatIDs>
+            <ChatID>1</ChatID>
             <ChatID>2</ChatID>
+        </ListaDeChatIDs>
+        <empresa>sepalo@gmail.com</empresa>
+        <departamento>Informática</departamento>
+        <manager>false</manager>
+        <puesto>Desarrollador</puesto>
+    </Usuario>
+    <Usuario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="empleado">
+        <email>manuel@gmail.com</email>
+        <nombre>Manuel Blancat Yuste</nombre>
+        <password>$2a$10$jmAYwrf9gZ0IRQ..rlsLAObJgmINFlX5Y9PrKYV1lt65rSJ1FnWLa</password>
+        <ListaDeChatIDs>
+            <ChatID>1</ChatID>
+            <ChatID>2</ChatID>
+            <ChatID>3</ChatID>
             <ChatID>4</ChatID>
         </ListaDeChatIDs>
-        <empresa>admin@gmail.com</empresa>
-        <departamento>000</departamento>
+        <empresa>sepalo@gmail.com</empresa>
+        <departamento>Informática</departamento>
         <manager>false</manager>
-        <puesto>000</puesto>
+        <puesto>Desarrollador</puesto>
+    </Usuario>
+    <Usuario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="empleado">
+        <email>juan@gmail.com</email>
+        <nombre>Juan Gómez</nombre>
+        <password>$2a$10$.ozRqywJN7u7xMd7PYOPmejWPuTq4tZYjGhp0WTJDDNGTCEnINVh.</password>
+        <ListaDeChatIDs>
+            <ChatID>1</ChatID>
+            <ChatID>3</ChatID>
+        </ListaDeChatIDs>
+        <empresa>sepalo@gmail.com</empresa>
+        <departamento>Administación</departamento>
+        <manager>false</manager>
+        <puesto>Contable</puesto>
     </Usuario>
 </ListaUsuarios>
