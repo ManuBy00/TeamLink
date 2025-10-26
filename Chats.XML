@@ -29,6 +29,17 @@
                 <RemitenteEmail>manuel@gmail.com</RemitenteEmail>
                 <FechaHora>2025-10-25T14:14:26.7484212</FechaHora>
             </Mensaje>
+            <Mensaje>
+                <Contenido>He cambiado el logo de la web. Lo paso por aquí</Contenido>
+                <RemitenteEmail>sepalo@gmail.com</RemitenteEmail>
+                <Adjunto>
+                    <NombreOriginal>_Horario DAM.jpg</NombreOriginal>
+                    <RutaGuardada>MEDIA_DIR\_Horario DAM.jpg</RutaGuardada>
+                    <TamanoBytes>385024</TamanoBytes>
+                    <TipoMime>image/jpeg</TipoMime>
+                </Adjunto>
+                <FechaHora>2025-10-25T18:25:53.5478596</FechaHora>
+            </Mensaje>
         </ListaDeMensajes>
         <nombreGrupo>Departamento de Desarrollo</nombreGrupo>
         <MiembrosDelGrupo>
@@ -64,6 +75,5 @@
         <Usuario1Email>sepalo@gmail.com</Usuario1Email>
         <Usuario2Email>manuel@gmail.com</Usuario2Email>
     </Chat>
-
-    <NextChatID>6</NextChatID>
+    <NextChatID>8</NextChatID>
 </ListaConversaciones>

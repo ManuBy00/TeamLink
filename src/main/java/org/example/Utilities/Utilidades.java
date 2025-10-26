@@ -1,9 +1,11 @@
 package org.example.Utilities;
 
+import javafx.scene.control.ButtonType;
 import org.example.Exceptions.DatoNoValido;
 import javafx.scene.control.Alert;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 public class Utilidades {
 
@@ -43,5 +45,28 @@ public class Utilidades {
         alert.showAndWait();
     }
 
+    /**
+     * Muestra una ventana de confirmación y espera la respuesta del usuario.
+     *
+     * @param titulo El texto del encabezado de la alerta (ej. "Confirmar Eliminación").
+     * @param mensaje El mensaje que se muestra al usuario (ej. "¿Está seguro?").
+     * @return true si el usuario hace clic en Aceptar (OK), false si hace clic en Cancelar.
+     */
+    public static boolean confirmarAccion(String titulo, String mensaje) {
+        // 1. Crear el objeto Alert de tipo CONFIRMATION
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
+        // 2. Configurar el texto del diálogo
+        alert.setTitle("Confirmación");
+        alert.setHeaderText(titulo);
+        alert.setContentText(mensaje);
+
+        // 3. Mostrar el diálogo y esperar la respuesta
+        Optional<ButtonType> result = alert.showAndWait();
+
+        // 4. Devolver true si la respuesta es OK
+        return result.isPresent() && result.get() == ButtonType.OK;
+    }
 }
+
+

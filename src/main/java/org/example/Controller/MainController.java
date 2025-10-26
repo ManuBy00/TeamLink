@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -21,16 +22,15 @@ import javafx.stage.Stage;
 import org.example.CRUD.ChatsManager;
 import org.example.CRUD.UsuariosManager;
 import org.example.DataAccess.XML;
+import org.example.Exceptions.ElementoNoEncontrado;
 import org.example.Model.*;
 import org.example.Utilities.Sesion;
 import org.example.Utilities.Utilidades;
 
 import java.awt.*;
 import java.io.*;
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.List;
 import java.util.function.Function;
@@ -63,6 +63,7 @@ public class MainController {
     private static final String MEDIA_DIR = "MEDIA_DIR/";
 
     Usuario usuarioIniciado = Sesion.getInstance().getUsuarioIniciado();
+
 
     public enum ChatFilter {
         ALL, PRIVADOS, GRUPALES
@@ -124,6 +125,74 @@ public class MainController {
     }
 
     /**
+     * Gestiona el proceso de eliminación del chat seleccionado.
+     *
+     * 1. Solicita confirmación al usuario antes de proceder con el borrado.
+     * 2. Si se confirma, elimina la referencia del ID del chat (chatID) del HashSet de IDs
+     * de chat de TODOS los usuarios participantes.
+     * 3. Elimina el objeto Chat del ChatsManager central.
+     * 4. Persiste los cambios llamando a XML.writeXML() en Chats.XML y Usuarios.XML.
+     * 5. Actualiza la interfaz de usuario (UI) recargando la lista de chats.
+     *
+     * @param chatAEliminar El objeto Chat a eliminar.
+     */
+    private void eliminarChat(Chat chatAEliminar) {
+        if (chatAEliminar == null) return;
+
+        int chatID = chatAEliminar.getChatID();
+
+        // Preguntar confirmación al usuario (Requisito de UX)
+        if (!Utilidades.confirmarAccion("Confirmar Eliminación",
+                "¿Estás seguro de que deseas eliminar el chat ID " + chatID + "?")) {
+            return;
+        }
+
+        try {
+            // Eliminar el ID de chat de TODOS los participantes
+
+            // Obtener la lista de emails de los participantes del chat
+            List<String> participantesEmails = obtenerParticipantesDelChat(chatAEliminar);
+
+            for (String email : participantesEmails) {
+                Usuario u = UsuariosManager.getInstance().buscarUsuario(email);
+                if (u != null) {
+                    u.getChatsID().remove(chatID); // Eliminar la referencia del usuario
+                }
+            }
+
+            //Eliminar el chat del sistema central
+            ChatsManager.getInstance().remove(String.valueOf(chatID));
+
+            // guardar los cambios
+            XML.writeXML(ChatsManager.getInstance(), "Chats.XML");
+            XML.writeXML(UsuariosManager.getInstance(), "Usuarios.XML");
+
+            // Actualizar UI
+            cargarChats(); // Recarga la lista de chats
+            mensajesListView.getItems().clear(); // Limpia el panel de mensajes
+            chatNameLabel.setText("Chat Eliminado");
+
+            Utilidades.mostrarAlerta("Éxito", "El chat ID " + chatID + " ha sido eliminado permanentemente.");
+
+        } catch (ElementoNoEncontrado e) {
+            Utilidades.mostrarAlerta("Error", "Error al eliminar: " + e.getMessage());
+        } catch (Exception e) {
+            Utilidades.mostrarAlerta("Error", "Error de persistencia al eliminar el chat.");
+            e.printStackTrace();
+        }
+    }
+
+    // Método auxiliar para obtener todos los participantes (necesario para el borrado)
+    private List<String> obtenerParticipantesDelChat(Chat chat) {
+        if (chat instanceof ChatGrupal grupo) {
+            return grupo.getMiembrosEmails();
+        } else if (chat instanceof ChatPrivado privado) {
+            return List.of(privado.getUsuario1Email(), privado.getUsuario2Email());
+        }
+        return List.of();
+    }
+
+    /**
      * Lanza la ventana del formulario para registrar un nuevo Empleado.
      */
     public void crearEmpleado(ActionEvent actionEvent) {
@@ -180,31 +249,69 @@ public class MainController {
      * cada objeto Chat en la interfaz de usuario (UI).
      */
     private void configurarChatCellFactory() {
-        chatsListView.setCellFactory(lv -> new javafx.scene.control.ListCell<Chat>() {
-            @Override
-            protected void updateItem(Chat chat, boolean empty) {
-                super.updateItem(chat, empty);
-                if (empty || chat == null) {
-                    setText(null);
-                } else {
-                    // Lógica para mostrar el nombre:
-                    if (chat instanceof ChatGrupal) {
-                        setText(((ChatGrupal) chat).getNombreGrupo());
+
+        // Obtenemos la referencia al controlador para poder llamar a métodos de instancia (ej. eliminarChat)
+        final MainController outerController = this;
+        final String usuarioEmail = Sesion.getInstance().getUsuarioIniciado().getEmail();
+
+        chatsListView.setCellFactory(lv -> {
+
+            ListCell<Chat> cell = new ListCell<Chat>() {
+
+                // --- Configuración del Menú Contextual (Clic Derecho) ---
+                private final ContextMenu contextMenu = new ContextMenu();
+                private final MenuItem deleteItem = new MenuItem("Eliminar Chat");
+
+                { // Bloque de inicialización de instancia para configurar la celda
+                    deleteItem.setOnAction(e -> {
+                        Chat chatAEliminar = getItem();
+                        if (chatAEliminar != null) {
+                            // Llamada al método de borrado del MainController
+                            outerController.eliminarChat(chatAEliminar);
+                        }
+                    });
+                    contextMenu.getItems().add(deleteItem);
+
+                    // Muestra el menú contextual con clic secundario
+                    setContextMenu(contextMenu);
+
+                    // Lógica para que el clic izquierdo seleccione (ya la maneja el ListView por defecto)
+                }
+
+                @Override
+                protected void updateItem(Chat chat, boolean empty) {
+                    super.updateItem(chat, empty);
+
+                    if (empty || chat == null) {
+                        setText(null);
+                        setGraphic(null);
+                        setContextMenu(null); // Ocultar menú si la celda está vacía
                     } else {
-                        UsuariosManager um = UsuariosManager.getInstance();
-                        Usuario usuario1 = um.buscarUsuario(((ChatPrivado)chat).getUsuario1Email());
-                        Usuario usuario2 = um.buscarUsuario(((ChatPrivado)chat).getUsuario2Email());
-                        if (usuarioIniciado.getEmail().equals(usuario1.getEmail())){
-                            setText(usuario2.getNombre());
-                        }else{
-                            setText(usuario1.getNombre());
+                        // Mantenemos el menú contextual visible
+                        setContextMenu(contextMenu);
+
+                        // Lógica para mostrar el nombre:
+                        if (chat instanceof ChatGrupal) {
+                            setText(((ChatGrupal) chat).getNombreGrupo());
+                        } else {
+                            // Lógica para Chat Privado: Identificar y mostrar el nombre del otro usuario
+                            UsuariosManager um = UsuariosManager.getInstance();
+                            Usuario usuario1 = um.buscarUsuario(((ChatPrivado)chat).getUsuario1Email());
+                            Usuario usuario2 = um.buscarUsuario(((ChatPrivado)chat).getUsuario2Email());
+
+                            // Si usuario1 es el usuario logueado, mostramos el nombre de usuario2, y viceversa.
+                            if (usuarioIniciado.getEmail().equals(usuario1.getEmail())){
+                                setText(usuario2.getNombre());
+                            }else{
+                                setText(usuario1.getNombre());
+                            }
                         }
                     }
                 }
-            }
+            };
+            return cell;
         });
     }
-
 
     /**
      * Carga y actualiza la vista de mensajes (mensajesListView) con el contenido
@@ -243,7 +350,6 @@ public class MainController {
      */
     private void configurarMensajeCellFactory() {
         String usuarioEmail = Sesion.getInstance().getUsuarioIniciado().getEmail();
-
         mensajesListView.setCellFactory(new javafx.util.Callback<ListView<Mensaje>, ListCell<Mensaje>>() {
             @Override
             public ListCell<Mensaje> call(ListView<Mensaje> param) {
@@ -326,7 +432,6 @@ public class MainController {
                     }
                 };
             }
-
         });
     }
 
@@ -509,7 +614,7 @@ public class MainController {
         }
     }
 
-    // Metodo auxiliar para generar el texto (reutilizado de tu código)
+    // Metodo auxiliar para generar el texto del informe
     private String generarContenidoInforme(Chat chat) {
         StringBuilder sb = new StringBuilder();
         sb.append("--- INFORME DE CONVERSACIÓN (ID: ").append(chat.getChatID()).append(") ---\n\n");
@@ -535,7 +640,7 @@ public class MainController {
     private void empaquetarConversacionEnZip(Chat chatSeleccionado, String contenidoInforme, File archivoDestino) throws IOException {
         // 1. Inicializar ZipOutputStream
         try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(archivoDestino))) {
-            // --- A. Añadir el Informe de Conversación (Texto) ---
+            //1. Añadir el Informe de Conversación (Texto)
 
             // Crear una entrada ZIP para el archivo de texto
             ZipEntry informeEntry = new ZipEntry("chat_informe_" + chatSeleccionado.getChatID() + ".txt");
@@ -547,7 +652,7 @@ public class MainController {
             // Cerrar la entrada del archivo de texto
             zos.closeEntry();
 
-            // --- B. Añadir los Archivos Adjuntos (Binarios) ---
+            // 2. Añadir los Archivos Adjuntos
 
             for (Mensaje msg : chatSeleccionado.getMensajes()) {
                 if (msg.getAdjunto() != null) {
@@ -755,7 +860,7 @@ public class MainController {
     }
 
     /**
-     * Lanza la ventana modal para añadir nuevos participantes al chat de grupo seleccionado.
+     * Lanza la ventana para añadir nuevos participantes al chat de grupo seleccionado.
      */
     public void lanzarAddParticipantes(ActionEvent event) {
         Chat chatSeleccionado = chatsListView.getSelectionModel().getSelectedItem();
@@ -773,7 +878,6 @@ public class MainController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/teamlink/addParticipantForm.fxml"));
             Parent root = loader.load();
-
             // Obtener el controlador del formulario
             AddParticipanteController controller = loader.getController();
 
@@ -792,6 +896,55 @@ public class MainController {
         } catch (IOException e) {
             Utilidades.mostrarAlerta("Error", "No se pudo cargar el formulario de participantes.");
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Carga la vista UserProfileView, que se llamará desde varios métodos
+     */
+    public void cargarProfileView(Usuario usuarioMostrar){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/teamlink/UserProfileView.fxml"));
+            Parent root = loader.load();
+
+            //inicializamos el controlador ants de lanzar la pantalla para pasarle el usuario a través del método setUsuario
+            UserProfileController userProfileController = loader.getController();
+            userProfileController.setUsuario(usuarioMostrar);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Carga la vista UserProfileView del propio usuario iniciado al pulsar botón perfil
+     */
+    public void lanzarProfileView(MouseEvent event){
+        cargarProfileView(usuarioIniciado);
+    }
+
+    /**
+     * Carga la vista
+     * @param mouseEvent
+     */
+    public void viewProfile(MouseEvent mouseEvent) {
+        Chat chatSeleccionado = chatsListView.getSelectionModel().getSelectedItem();
+        UsuariosManager um = UsuariosManager.getInstance();
+        if (chatSeleccionado instanceof ChatPrivado){
+            ChatPrivado chat =  (ChatPrivado)chatSeleccionado;
+            String email1 = chat.getUsuario1Email().toLowerCase();
+            String email2 = chat.getUsuario2Email().toLowerCase();
+
+            String emailDestinatario;
+            if (email1.equals(usuarioIniciado.getEmail())) {
+                emailDestinatario = email2;
+            }else {
+                emailDestinatario=email1;
+            }
+            cargarProfileView(um.buscarUsuario(emailDestinatario));
         }
     }
 }

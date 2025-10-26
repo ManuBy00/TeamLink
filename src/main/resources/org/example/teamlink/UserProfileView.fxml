@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" prefHeight="550.0" prefWidth="400.0" spacing="20.0"
+      style="-fx-background-color: #ECF0F1;"
+      xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.example.Controller.UserProfileController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="30.0" />
+    </padding>
+
+    <Label fx:id="tituloLabel" text="Perfil de Usuario" textFill="#2C3E50">
+        <font><Font name="System Bold" size="24.0" /></font>
+    </Label>
+
+    <StackPane prefHeight="120.0" prefWidth="120.0">
+
+        <Circle fx:id="clipCircle" radius="60.0" fill="transparent" stroke="#BDC3C7" strokeWidth="2.0" />
+
+        <ImageView fx:id="profileImageView" fitHeight="120.0" fitWidth="120.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../../../Images/grupos.png" />
+            </image>
+        </ImageView>
+
+    </StackPane>
+
+    <GridPane fx:id="infoGrid" hgap="10.0" vgap="10.0" alignment="CENTER">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="10.0" prefWidth="250.0" />
+        </columnConstraints>
+    </GridPane>
+</VBox>

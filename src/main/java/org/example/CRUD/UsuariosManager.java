@@ -71,6 +71,11 @@ public class UsuariosManager implements CRUD<Usuario>{
 
     }
 
+    /**
+     * Busca el usuario a partir de su email
+     * @param email del usuario buscado
+     * @return usuario encontrado
+     */
     public Usuario buscarUsuario(String email){
         Usuario usuarioEncontrado = null;
         for (Usuario usuario : usuariosList){
